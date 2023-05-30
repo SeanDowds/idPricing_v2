@@ -1,0 +1,11 @@
+
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  text-align:center;
+}
+
+input{
+  width: 50%;
+}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    /* - This Block sets the button uses variable from from the DB id=2 when page is loaded- }*/
+  window.addEventListener('DOMContentLoaded', function() {
+    {% if currentOption == 'btn_NoAuth' %}
+      changeButton('btn_NoAuth', '#2492bf', '#f39200');
+    {% elif currentOption == 'btn_email' %}
+      changeButton('btn_email', '#f39200', '#2492bf');
+    {% elif currentOption == 'btn_fullAuth' %}
+      changeButton('btn_fullAuth', '#2492bf', '#f39200');
+    {% endif %}
+  });
+
+  /* - This Block allows for a single selection - */
+
+  function changeButton(btn_id, btn_color,alt_color) {
+    var button = document.getElementById(btn_id);
+    var buttons = document.getElementsByClassName("btn");
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].id !== btn_id) {
+        buttons[i].classList.remove("button-true");
+        buttons[i].classList.add("button-false");
+        buttons[i].style.backgroundColor = "#2492bf00";
+        if (buttons[i].classList.contains("blue")) {
+          buttons[i].style.color = '#2492bf';
+        }else { 
+          buttons[i].style.color = '#f39200';
+        }
+      }
+    }
+    if (button.classList.contains("button-true")) {
+      button.classList.remove("button-true");
+      button.classList.add("button-false");
+      button.style.backgroundColor = "#2492bf00";
+      button.style.color = btn_color;
+    } else {
+      button.classList.remove("button-false");
+      button.classList.add("button-true");
+      button.style.backgroundColor = btn_color;
+      button.style.color = "white";
+    }
+
+    // Send an AJAX request to your server with the btn_id value
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/handle_btn_id');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ btn_id_auth: btn_id, is_button_true: button.classList.contains("button-true") }));
+  }
+  
+
+/* - These are the Hover Functions - */
+
+$(document).ready(function() {
+  var timeoutId; // Declare a variable to store the timeout ID
+
+  function activateHoverWithDelay(buttonId, tooltipId) {
+    $(buttonId).hover(function() {
+      timeoutId = setTimeout(function() {
+        $(tooltipId).fadeIn(800);
+      }, 850); // Set a timeout of 0.85 second
+
+    }, function() {
+      clearTimeout(timeoutId);// Clear the timeout if the mouse leaves the element
+      $(tooltipId).fadeOut(100);
+    });
+  }
+
+  activateHoverWithDelay("#btn_NoAuth", "#NoAuth_tooltip");
+  activateHoverWithDelay("#btn_email", "#email_tooltip");
+  activateHoverWithDelay("#btn_fullAuth", "#fullAuth_tooltip");
+});
+
+
+</script>
+
+
+<div class="page-center" id = "cont1">
+  <h3 id="h3"> Authentication and Authorisation:</h3>
+  <br>
+  <p>
+  The sign in process for users may not be neccessary when there is no personalised service to the user, or information captured which is specific to the user.  In most case encrypted Auth will enhance the user experience and collect valuable user data that can be used to provide a better user experience.</p>
+
+</br>
+
+<div class="button-container">
+
+  <btn id="btn_NoAuth" class="btn blue" onclick="changeButton('btn_NoAuth','#2492bf','#f39200')">
+    <i id="icon_NoAuth" class="fa fa-home blu"></i>
+    <span>No Auth</span>
+  </btn>
+
+  <btn id="btn_email" class="btn orange" onclick="changeButton('btn_email','#f39200','#2492bf')" ><i class="fa fa-home orang"></i><span>Email only</span></btn>
+  
+  <btn  id="btn_fullAuth" class="btn blue"  onclick="changeButton('btn_fullAuth','#2492bf','#f39200')"><i class="fa fa-home blu"  ></i><span>Email & Social</span></btn>
+
+</div> 
+
+
+
+<!--Write and ID tooltips so they can be styled-->
+
+<div id="NoAuth_tooltip"><p>
+Some applications such as technical tools and calculators will not need Auth.  This can reduce costs and eliminate the hassle of the sign in process</p>
+</div> 
+<div id="email_tooltip"><p class="orangetext">
+Email Auth is sufficient for full Auth.</p>
+</div> 
+<div id="fullAuth_tooltip"><p>
+Full Auth includes quick and easy social logins such as Google and Facebook. This will improve the user experience.</p>
+</div> 
+
+</div>
+
+
+</div>
+
+
+<div>
+  <a href="/users.html">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/intergrations.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+{% endblock %}

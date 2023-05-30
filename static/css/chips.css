@@ -1,0 +1,58 @@
+
+/* Standard Chips for Selection Pages */
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chip {
+  border-radius: 15px;
+  display: flex;
+  grid-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  height: 45px;
+  max-width: 100px;
+  margin: 8px;
+  transition: all 0.4s ease-out;
+  font-size: 14px;
+  line-height: 1.0;
+  text-align: center;
+}
+
+.blue{
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.orange{
+  border: 2px solid var(--secondary-orange);
+  color: var(--secondary-orange);
+}
+
+
+.chip:hover {
+  border: 3px solid;
+
+}
+
+
+.button-true .blu {
+  color: white;
+}
+.button-false .blu {
+  color: var(--primary-blue);
+}
+.button-true .orang {
+  color: white;
+}
+.button-false .orang {
+  color: var(--secondary-orange);
+}
+
+
+
+

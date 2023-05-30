@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="page-center" id="cont1">
+  <h3 id="h3">Fast estimates for busy people</h3>
+
+  <br>
+  <br>
+  <p id="par1">
+    Business applications are inherently complex systems. To simplify, we will guide you through a stepped process. At each phase, we estimate your requirements, enabling us to remove unnecessary detail.
+  </p>
+  <p id="par2">
+    Should you wish to revert to a previous step, simply press the navigation arrow on the left.
+  </p>
+  <br>
+  <p id="par3">
+    When you are done, press the next navigation arrow on the right.
+  </p>
+  <br>
+</div>
+
+<div>
+
+
+  <a href="/business_type.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+</div>
+
+<script>
+
+var slidePar1 = document.getElementById('par1');
+var slidePar2 = document.getElementById('par2');
+var slidePar3 = document.getElementById('par3');
+
+setTimeout(function() {
+slidePar1.classList.toggle('fade');
+}, 300);
+
+setTimeout(function() {
+slidePar2.classList.toggle('fade');
+}, 6000);
+
+setTimeout(function() {
+slidePar3.classList.toggle('fade');
+}, 9000);
+
+</script>
+
+
+
+
+{% endblock %}

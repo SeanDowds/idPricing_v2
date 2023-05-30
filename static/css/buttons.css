@@ -1,0 +1,131 @@
+
+
+/* The following is arrow navigation */
+
+.arrow-button {
+  position: fixed;
+  padding:0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-color: var(--body-grey);
+  text-align: center;
+  line-height: 20px;
+  font-size: 30px;
+  color:grey;
+  cursor: pointer;
+}
+
+.arrow-button.left {
+  left: 60px;
+
+}
+
+.back:active {/* aka pressed */
+  background-color: var(--secondary-orange);
+  border: 3px solid var(--secondary-orange);
+}
+
+
+.arrow-button.right {
+  right: 50px;
+}
+
+
+/* Standard Buttons for Selection Pages */
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  min-height: 150px;
+  margin: 20px;
+  flex: 1;
+  max-width: 150px;
+  max-height: 150px;
+  transition: all 0.4s ease-out;
+}
+
+.btn i {
+  font-size: 60px;
+}
+.blu{
+  color: var(--primary-blue);
+}
+.orang{
+  color: var(--secondary-orange);
+}
+
+.btn:hover {
+  border: 3px solid;
+}
+
+.blue{
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.orange{
+  border: 2px solid var(--secondary-orange);
+  color: var(--secondary-orange);
+}
+
+.btn {
+  font-size: 18px;
+  text-align: center;
+}
+
+.button-true .blu {
+  color: white;
+}
+.button-false .blu {
+  color: var(--primary-blue);
+}
+.button-true .orang {
+  color: white;
+}
+.button-false .orang {
+  color: var(--secondary-orange);
+}
+
+#submitbtn {
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 40px;
+  margin: 20px;
+  flex: 1;
+  max-width: 30%;
+  max-height: 30%;
+  transition: all 0.4s ease-out;
+  border: 1.5px solid var(--secondary-orange);
+  color: var(--secondary-orange);
+  background-color: transparent;
+}
+
+#submitbtn:hover {
+  border: 3px solid;
+}
+
+.inputbox {
+  border-radius: 10px;
+  border: 2px solid var(--secondary-orange);
+  background-color: var(--body-grey);
+  color: var(--primary-blue); /* Change the text color to white */
+}
+
+
+

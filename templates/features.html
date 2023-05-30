@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+/* - This Block sets the buttons uses variable from from the DB id=2 when page is loaded}*/
+  window.addEventListener('DOMContentLoaded', function() {
+
+    {% for thisChip in currentChips %}
+    var button = document.getElementById('{{ thisChip }}');
+    button.classList.remove("button-false");
+    button.classList.add("button-true");
+    button.style.color = "black";
+    if (button.classList.contains('orange')) {
+      button.style.backgroundColor = '#f39200';
+    } else {
+      button.style.backgroundColor = '#2492bf';
+    }
+    {% endfor %}
+  }); 
+
+  /* - This Block allows for a single selection - */
+
+function changeButton(btn_id, btn_color, alt_color) {
+  var button = document.getElementById(btn_id);
+
+  if (button.classList.contains("button-true")) {
+    button.classList.remove("button-true");
+    button.classList.add("button-false");
+    button.style.backgroundColor = "#2492bf00";
+    button.style.color = btn_color;
+  } else {
+    button.classList.remove("button-false");
+    button.classList.add("button-true");
+    button.style.backgroundColor = btn_color;
+    button.style.color = "black";
+  }
+
+  // Get all the button IDs where the button.classList.contains("button-true")
+  var button_ids = [];
+  var buttons = document.querySelectorAll("[class^='chip']");
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].classList.contains("button-true")) {
+      button_ids.push(buttons[i].id);
+    }
+  }
+
+  // Send an AJAX request to your server with the list of button IDs
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/handle_features");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(JSON.stringify({ feature_ids: button_ids }));
+
+}
+  
+
+/* - These are the Hover Functions - */
+
+$(document).ready(function() {
+  var timeoutId; // Declare a variable to store the timeout ID
+
+  function activateHoverWithDelay(buttonId, tooltipId) {
+    $(buttonId).hover(function() {
+      timeoutId = setTimeout(function() {
+        $(tooltipId).fadeIn(800);
+      }, 900); // Set a timeout of 0.85 second
+
+    }, function() {
+      clearTimeout(timeoutId);// Clear the timeout if the mouse leaves the element
+      $(tooltipId).fadeOut(100);
+    });
+  }
+
+  activateHoverWithDelay("#chip_Dashboard", "#Dashboard_tooltip");
+  activateHoverWithDelay("#chip_CustomerManagement", "#CustomerManagement_tooltip");
+  activateHoverWithDelay("#chip_StaffManagement", "#StaffManagement_tooltip");
+  activateHoverWithDelay("#chip_Activity", "#Activity_tooltip");
+  activateHoverWithDelay("#chip_Ratings", "#Ratings_tooltip");
+  activateHoverWithDelay("#chip_Animations", "#Animations_tooltip");
+  activateHoverWithDelay("#chip_QRCodes", "#QRCodes_tooltip");
+  activateHoverWithDelay("#chip_Calculator", "#Calculator_tooltip");
+  activateHoverWithDelay("#chip_Analytics", "#Analytics_tooltip");
+  activateHoverWithDelay("#chip_Upload", "#Upload_tooltip");
+  activateHoverWithDelay("#chip_Video", "#Video_tooltip");
+  activateHoverWithDelay("#chip_Calendar", "#Calendar_tooltip");
+  activateHoverWithDelay("#chip_Otherfeature", "#Otherfeature_tooltip");
+
+});
+
+</script>
+
+
+<div class="page-center">
+  <h3 class=selector_title>App features:</h3>
+<br>
+<p>Your app will provide users with a combination of useful and entertaining features. Some may be unique, while others will be commonly used in popular business models. You should choose which features your app will need based on its purpose and target audience.</p>
+
+<br>
+<div class="chip-container">
+
+  <btn id="chip_Dashboard" class="chip blue" 
+  onclick="changeButton('chip_Dashboard','#2492bf','#f39200')"><span class="smalltext">Dashboard</span></btn>
+
+  <btn id="chip_StaffManagement" class="chip orange" 
+  onclick="changeButton('chip_StaffManagement','#f39200','#2492bf')"><span class="smalltext">Staff<br>Management</span></btn>
+
+  <btn id="chip_CustomerManagement" class="chip blue" 
+  onclick="changeButton('chip_CustomerManagement','#2492bf','#f39200')"><span class="smalltext">Customer<br>Management</span></btn>
+
+  <btn id="chip_Activity" class="chip orange" 
+  onclick="changeButton('chip_Activity','#f39200','#2492bf')"><span class="smalltext">Activity<br>Flow</span></btn>
+
+  <btn id="chip_Ratings" class="chip blue" 
+  onclick="changeButton('chip_Ratings','#2492bf','#f39200')"><span class="smalltext">Ratings/<br>Reviews</span></btn>
+  
+  <btn id="chip_Animations" class="chip orange" 
+  onclick="changeButton('chip_Animations','#f39200','#2492bf')"><span class="smalltext">Animations</span></btn>
+
+  <btn id="chip_Analytics" class="chip blue" 
+  onclick="changeButton('chip_Analytics','#2492bf','#f39200')"><span class="smalltext">Analytics</span></btn>
+
+  <btn id="chip_QRCodes" class="chip orange" 
+  onclick="changeButton('chip_QRCodes','#f39200','#2492bf')"><span class="smalltext">QR Codes</span></btn>
+
+  <btn id="chip_Calculator" class="chip blue" 
+  onclick="changeButton('chip_Calculator','#2492bf','#f39200')"><span class="smalltext">Calculator/<br>Tools</span></btn>
+  
+  <btn id="chip_Video" class="chip orange" 
+  onclick="changeButton('chip_Video','#f39200','#2492bf')"><span class="smalltext">Video<br>Streaming</span></btn>
+
+  <btn id="chip_Upload" class="chip blue" 
+  onclick="changeButton('chip_Upload','#2492bf','#f39200')"><span class="smalltext">File Upload</span></btn>
+  
+  <btn id="chip_Calendar" class="chip orange" 
+  onclick="changeButton('chip_Calendar','#f39200','#2492bf')"><span class="smalltext">Calendar</span></btn>
+  
+  <btn id="chip_Otherfeature" class="chip blue" 
+  onclick="changeButton('chip_Otherfeature','#2492bf','#f39200')"><span class="smalltext">Other<br>Specialised</span></btn>
+  
+
+
+</div> 
+
+
+<!--Write and ID tooltips so they can be styled-->
+
+<div id="Dashboard_tooltip" class="chipTooltip"><p>
+A dashboard will allow users to manage their account settings, view analytics, and more.</p>
+</div> 
+<div id="CustomerManagement_tooltip"  class="chipTooltip"><p>
+Store customer contact information, view customer transaction history, track customer support conversations, or create targeted campaigns and promotions</p>
+</div> 
+<div id="StaffManagement_tooltip" class="chipTooltip"><p class=orangetext>
+Track staff information, performance, and manage employee schedules.</p>
+</div> 
+<div id="Activity_tooltip" class="chipTooltip"><p class=orangetext>
+Activity flows guide users through the app, and in the real world, to help them complete tasks more efficiently.  </p>
+</div> 
+<div id="Ratings_tooltip" class="chipTooltip"><p>
+Ratings allow users to provide feedback on services and goods. They can be public or private, which allows for improvement and problem resolution.</p>
+</div> 
+<div id="Animations_tooltip" class="chipTooltip"><p class=orangetext>
+Animations can share information with the user graphically in a fast and entertaining way, transcending languages.</p>
+</div>
+<div id="QRCodes_tooltip" class="chipTooltip"><p class=orangetext>
+QR Codes can be used to quickly and securely access data from an app, or a product, such as customer information or product details.</p>
+</div> 
+<div id="Calculator_tooltip" class="chipTooltip"><p>
+Bespoke technical tools and calulators empower users to make complexed calculations fast and simple.</p>
+</div> 
+<div id="Analytics_tooltip" class="chipTooltip"><p>
+Use analytics to read and visualise data collected by the app in a way that simplifies management decisions.</p>
+</div>
+<div id="Upload_tooltip" class="chipTooltip"><p>
+Uploading data files, contractual documents, scanned pdfs, ect. to the database or CMS </p>
+</div> 
+<div id="Video_tooltip" class="chipTooltip"><p class=orangetext>Use videos to demonstrate features, explain processes, or provide tutorials. Videos can also promote products or services, or simply provide entertainment.</p>
+</div> 
+<div id="Calendar_tooltip" class="chipTooltip"><p class=orangetext>
+Calendars keep track of events, tasks, create reminders, show notifications, view schedules and set deadlines.</p>
+</div> 
+<div id="Otherfeature_tooltip" class="chipTooltip"><p>
+Obviously prices will fluctuate but this is an estimate only. We will allow a little extra for one more.</p>
+</div>
+
+</div>
+
+
+<div>
+  <a href="/intergrations.html">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/final.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+
+
+{% endblock %}

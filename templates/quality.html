@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  /* - This Block sets the button uses variable from from the DB id=2 when page is- }*/
+  window.addEventListener('DOMContentLoaded', function() {
+    {% if currentOption == 'btn_MVP' %}
+      changeButton('btn_MVP', '#2492bf', '#f39200');
+    {% elif currentOption == 'btn_UI' %}
+      changeButton('btn_UI', '#f39200', '#2492bf');
+    {% elif currentOption == 'btn_UX' %}
+      changeButton('btn_UX', '#2492bf', '#f39200');
+    {% endif %}
+  });
+
+
+  /* - This Block allows for a single selection - */
+  function changeButton(btn_id, btn_color,alt_color) {
+    var button = document.getElementById(btn_id);
+    var buttons = document.getElementsByClassName("btn");
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].id !== btn_id) {
+        buttons[i].classList.remove("button-true");
+        buttons[i].classList.add("button-false");
+        buttons[i].style.backgroundColor = "#2492bf00";
+        if (buttons[i].classList.contains("blue")) {
+          buttons[i].style.color = '#2492bf';
+        }else { 
+          buttons[i].style.color = '#f39200';
+        }
+      }
+    }
+    if (button.classList.contains("button-true")) {
+      button.classList.remove("button-true");
+      button.classList.add("button-false");
+      button.style.backgroundColor = "#2492bf00";
+      button.style.color = btn_color;
+    } else {
+      button.classList.remove("button-false");
+      button.classList.add("button-true");
+      button.style.backgroundColor = btn_color;
+      button.style.color = "white";
+    }
+
+    // Send an AJAX request to your server with the btn_id value
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/handle_btn_id');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ btn_id_quality: btn_id, is_button_true: button.classList.contains("button-true") }));
+  }
+  
+
+/* - These are the Hover Functions - */
+
+$(document).ready(function() {
+  var timeoutId; // Declare a variable to store the timeout ID
+
+  function activateHoverWithDelay(buttonId, tooltipId) {
+    $(buttonId).hover(function() {
+      timeoutId = setTimeout(function() {
+        $(tooltipId).fadeIn(800);
+      }, 850); // Set a timeout of 0.85 second
+
+    }, function() {
+      clearTimeout(timeoutId);// Clear the timeout if the mouse leaves the element
+      $(tooltipId).fadeOut(100);
+    });
+  }
+
+  activateHoverWithDelay("#btn_MVP", "#MVP_tooltip");
+  activateHoverWithDelay("#btn_UI", "#UI_tooltip");
+  activateHoverWithDelay("#btn_UX", "#UX_tooltip");
+});
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+<div class="page-center" id = "cont1">
+  <h3 id="h3"> App Quality:</h3>
+  <br>
+  <p id="par4">
+  The quality of the interface requires increased amount of specialised design and coding to ensure users have a good experience using the App.  This would be vital to ensure continuous public engagement, but rather insignificant for internal company applications.</p>
+
+</br>
+
+<div class="button-container">
+
+  <btn id="btn_MVP" class="btn blue" onclick="changeButton('btn_MVP','#2492bf','#f39200')">
+    <i id="icon_MVP" class="fa fa-home blu"></i>
+    <span>MVP</span>
+  </btn>
+
+  <btn id="btn_UI" class="btn orange" onclick="changeButton('btn_UI','#f39200','#2492bf')" ><i class="fa fa-home orang"></i><span>Designed UI</span></btn>
+  
+  <btn  id="btn_UX" class="btn blue"  onclick="changeButton('btn_UX','#2492bf','#f39200')"><i class="fa fa-home blu"  ></i><span>Full UI and UX</span></btn>
+
+</div> 
+
+
+
+<!--Write and ID tooltips so they can be styled-->
+
+<div id="MVP_tooltip"><p>
+A Minimal Viable Product (MVP) will provide all the functionality with little styling.  Components will still follow Googles standard Material Design and can includes the company logo and colours which will maintain a professional look and feel at the fraction of the cost.</p>
+</div> 
+<div id="UI_tooltip"><p class="orangetext">
+A professionaly designed User Interface (UI) will enhance the look and feel of the app, giving it a unique professional feel which will enhance the companies image and improve customer loyalty.</p>
+</div> 
+<div id="UX_tooltip"><p>
+A designed User Experience (UX) will include a simplified layout including animations will make complexed apps easy to use and a pleasure to users.  This will encourage repeated use and organic referrals to the app. You customers become a part of your sales team.</p>
+</div> 
+
+</div>
+
+
+</div>
+
+
+<div>
+  <a href="/apptype.html">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/users.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+{% endblock %}

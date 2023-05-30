@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  /* - This Block sets the button uses variable from from the DB id=2 when page is- }*/
+  window.addEventListener('DOMContentLoaded', function() {
+    {% if currentOption == 'btn_Web' %}
+      changeButton('btn_Web', '#2492bf', '#f39200');
+    {% elif currentOption == 'btn_Mobile' %}
+      changeButton('btn_Mobile', '#f39200', '#2492bf');
+    {% elif currentOption == 'btn_WM' %}
+      changeButton('btn_WM', '#2492bf', '#f39200');
+    {% endif %}
+  });
+
+
+  /* - This Block allows for a single selection - */
+
+  function changeButton(btn_id, btn_color,alt_color) {
+    var button = document.getElementById(btn_id);
+    var buttons = document.getElementsByClassName("btn");
+    console.log("hello world");
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].id !== btn_id) {
+        buttons[i].classList.remove("button-true");
+        buttons[i].classList.add("button-false");
+        buttons[i].style.backgroundColor = "#2492bf00";
+        if (buttons[i].classList.contains("blue")) {
+          buttons[i].style.color = '#2492bf';
+        }else { 
+          buttons[i].style.color = '#f39200';
+        }
+      }
+    }
+    if (button.classList.contains("button-true")) {
+      button.classList.remove("button-true");
+      button.classList.add("button-false");
+      button.style.backgroundColor = "#2492bf00";
+      button.style.color = btn_color;
+    } else {
+      button.classList.remove("button-false");
+      button.classList.add("button-true");
+      button.style.backgroundColor = btn_color;
+      button.style.color = "white";
+    }
+
+    // Send an AJAX request to your server with the btn_id value
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/handle_btn_id');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ btn_id_apptype: btn_id, is_button_true: button.classList.contains("button-true") }));
+  }
+  
+
+/* - These are the Hover Functions - */
+
+$(document).ready(function() {
+  var timeoutId; // Declare a variable to store the timeout ID
+
+  function activateHoverWithDelay(buttonId, tooltipId) {
+    $(buttonId).hover(function() {
+      timeoutId = setTimeout(function() {
+        $(tooltipId).fadeIn(800);
+      }, 850); // Set a timeout of 0.85 second
+
+    }, function() {
+      clearTimeout(timeoutId);// Clear the timeout if the mouse leaves the element
+      $(tooltipId).fadeOut(100);
+    });
+  }
+
+  activateHoverWithDelay("#btn_Web", "#Web_tooltip");
+  activateHoverWithDelay("#btn_Mobile", "#Mobile_tooltip");
+  activateHoverWithDelay("#btn_WM", "#WM_tooltip");
+});
+
+
+</script>
+
+
+
+<div class="page-center" id = "cont1">
+  <h3 id="h3"> App Type:</h3>
+  <br>
+  <p id="par4">
+  The type of app used needs to be specific to your application.  There are advantages for each type, as well as cost implications</p>
+
+</br>
+
+<div class="button-container">
+
+  <btn id="btn_Web" class="btn blue" onclick="changeButton('btn_Web','#2492bf','#f39200')">
+    <i id="icon_Web" class="fa fa-home blu"></i>
+    <span>Web App</span>
+  </btn>
+
+  <btn id="btn_Mobile" class="btn orange" onclick="changeButton('btn_Mobile','#f39200','#2492bf')" ><i class="fa fa-home orang"></i><span>Mobile App</span></btn>
+  
+  <btn  id="btn_WM" class="btn blue"  onclick="changeButton('btn_WM','#2492bf','#f39200')"><i class="fa fa-home blu"  ></i><span>Web & Mobile</span></btn>
+
+</div> 
+
+
+
+<!--Write and ID tooltips so they can be styled-->
+
+<div id="Web_tooltip"><p>
+Progressive Web Apps allow advanced functionality not previously possible. They can also be adapted for mobile and desktop use. </p>
+</div> 
+<div id="Mobile_tooltip"><p class="orangetext">
+Mobile Apps are typically funded and may be heavy reliant on technology to get to profitability.  Choices would be tailored to these specific requirements.</p>
+</div> 
+<div id="WM_tooltip"><p>
+For full accessibility, its common to provide web app and mobile app options to users. Web apps are also generally preferrable as Admin Dashboards.</p>
+</div> 
+
+</div>
+
+</div>
+
+
+<div>
+  <a href="/budget.html">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/quality.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+{% endblock %}

@@ -1,0 +1,82 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js">
+</script>
+<script>
+
+  function updateRangeValue(value) {
+    var step = value > 10000 ? 1000 : 500; // Set the step value based on the range input value
+    value = Math.round(value / step) * step; // Round to the nearest step value
+    document.getElementById('rangeValue').innerText = value;
+
+    var plusElement = document.getElementById('plus');
+    if (value === 100000) {
+      plusElement.style.display = 'inline';
+    } else {
+      plusElement.style.display = 'none';
+    }
+
+    document.querySelector('input[type="range"]').step = step; // Set the new step value for the range input
+
+    // Send an AJAX request to the server with the value parameter
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/handle_range_value');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ budget_value: value }));
+  }
+
+  // Call the updateRangeValue function when the input range value changes
+  document.querySelector('input[type="range"]').addEventListener('input', function() {
+    updateRangeValue(this.value);
+  });
+</script>
+
+
+<div class="page-center" id = "cont1">
+  <h3 id="h3"> Budget:</h3>
+  <br>
+  <p id="par4">
+  Budget Constraints will impact the Design Quality and/or Functionality of your app.  We will reduce the options to accomodate a realistic target budget, and you can navigate back to adjust your choices if neccessary.</p>
+
+</br>
+
+    <div class="slider">
+      <div><input type="range" min="500" max="100000" value="{{ currentRange }}" step=500 width=500 oninput="updateRangeValue(this.value) = this.value"></div>
+      <span>£ </span>
+      <span id="rangeValue">{{ currentRange }}</span>
+      <span id="plus" style="display:none;">+</span>
+    </div>
+
+</div>
+
+</div>
+
+
+<br>
+
+<div>
+  <a href="/business_type.html">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/apptype.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+
+
+
+{% endblock %}
+
+
+
+

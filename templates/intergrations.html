@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+/* - This Block sets the buttons uses variable from from the DB id=2 when page is loaded}*/
+  window.addEventListener('DOMContentLoaded', function() {
+
+    {% for thisChip in currentChips %}
+    var button = document.getElementById('{{ thisChip }}');
+    button.classList.remove("button-false");
+    button.classList.add("button-true");
+    button.style.color = "black";
+    if (button.classList.contains('orange')) {
+      button.style.backgroundColor = '#f39200';
+    } else {
+      button.style.backgroundColor = '#2492bf';
+    }
+    {% endfor %}
+  }); 
+
+  /* - This Block allows for a single selection - */
+
+  function changeButton(btn_id, btn_color, alt_color) {
+    var button = document.getElementById(btn_id);
+
+    if (button.classList.contains("button-true")) {
+      button.classList.remove("button-true");
+      button.classList.add("button-false");
+      button.style.backgroundColor = "#2492bf00";
+      button.style.color = btn_color;
+    } else {
+      button.classList.remove("button-false");
+      button.classList.add("button-true");
+      button.style.backgroundColor = btn_color;
+      button.style.color = "black";
+    }
+
+  // Get all the button IDs where the button.classList.contains("button-true")
+    var button_ids = [];
+    var buttons = document.querySelectorAll("[class^='chip']");
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].classList.contains("button-true")) {
+        button_ids.push(buttons[i].id);
+      }
+    }
+
+  // Send an AJAX request to your server with the list of button IDs
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/handle_intergrations");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({ intergration_ids: button_ids }));
+  }
+  
+
+
+/* - These are the Hover Functions - */
+
+  $(document).ready(function() {
+  var timeoutId; // Declare a variable to store the timeout ID
+
+  function activateHoverWithDelay(buttonId, tooltipId) {
+    $(buttonId).hover(function() {
+      timeoutId = setTimeout(function() {
+        $(tooltipId).fadeIn(800);
+      }, 900); // Set a timeout of 0.9 second
+
+    }, function() {
+      clearTimeout(timeoutId);// Clear the timeout if the mouse leaves the element
+      $(tooltipId).fadeOut(100);
+    });
+  }
+
+  activateHoverWithDelay("#chip_Payments", "#Payments_tooltip");
+  activateHoverWithDelay("#chip_email", "#chip_email_tooltip");
+  activateHoverWithDelay("#chip_Maps", "#Maps_tooltip");
+  activateHoverWithDelay("#chip_IOT", "#IOT_tooltip");
+  activateHoverWithDelay("#chip_SMS", "#SMS_tooltip");
+  activateHoverWithDelay("#chip_Finance", "#Finance_tooltip");
+  activateHoverWithDelay("#chip_Delivery", "#Delivery_tooltip");
+  activateHoverWithDelay("#chip_Chat", "#Chat_tooltip");
+  activateHoverWithDelay("#chip_CRM", "#CRM_tooltip");
+  activateHoverWithDelay("#chip_ERP", "#ERP_tooltip");
+  activateHoverWithDelay("#chip_Fitness", "#Fitness_tooltip");
+  activateHoverWithDelay("#chip_Other", "#Other_tooltip");
+
+});
+
+</script>
+
+
+<div class="page-center">
+  <h3 class=selector_title>Third party intergrations:</h3>
+  <br>
+  <p>Modern Applications generally rely on third party modules to make them powerful at a fraction of the cost of designing them from scratch.  There is still a small cost in intergrating them into the base software.</p>
+
+  <br>
+  <div class="chip-container">
+
+    <btn id="chip_Payments" class="chip blue" 
+    onclick="changeButton('chip_Payments','#2492bf','#f39200')"><span class="smalltext">Payments</span></btn>
+
+    <btn id="chip_email" class="chip orange" 
+    onclick="changeButton('chip_email','#f39200','#2492bf')"><span class="smalltext">Email</span></btn>
+
+    <btn id="chip_Maps" class="chip blue" 
+    onclick="changeButton('chip_Maps','#2492bf','#f39200')"><span class="smalltext">Maps</span></btn>
+
+    <btn id="chip_IOT" class="chip orange" 
+    onclick="changeButton('chip_IOT','#f39200','#2492bf')"><span class="smalltext">IoT</span></btn>
+
+    <btn id="chip_SMS" class="chip blue" 
+    onclick="changeButton('chip_SMS','#2492bf','#f39200')"><span class="smalltext">SMS</span></btn>
+
+    <btn id="chip_Finance" class="chip orange" 
+    onclick="changeButton('chip_Finance','#f39200','#2492bf')"><span class="smalltext">Finance</span></btn>
+
+    <btn id="chip_Delivery" class="chip orange" 
+    onclick="changeButton('chip_Delivery','#f39200','#2492bf')"><span class="smalltext">Delivery</span></btn>
+
+    <btn id="chip_Chat" class="chip blue" 
+    onclick="changeButton('chip_Chat','#2492bf','#f39200')"><span class="smalltext">Chat</span></btn>
+
+    <btn id="chip_CRM" class="chip orange" 
+    onclick="changeButton('chip_CRM','#f39200','#2492bf')"><span class="smalltext">CRM</span></btn>
+
+    <btn id="chip_ERP" class="chip blue" 
+    onclick="changeButton('chip_ERP','#2492bf','#f39200')"><span class="smalltext">ERP</span></btn>
+
+    <btn id="chip_Fitness" class="chip orange" 
+    onclick="changeButton('chip_Fitness','#f39200','#2492bf')"><span class="smalltext">Fitness</span></btn>
+
+    <btn id="chip_Other" class="chip blue" 
+    onclick="changeButton('chip_Other','#2492bf','#f39200')"><span class="smalltext">Other</span></btn>
+
+
+  </div> 
+
+
+  <!--Write and ID tooltips so they can be styled-->
+
+  <div id="Payments_tooltip" class="chipTooltip"><p>
+  APIs like Stripe, PayPal and Braintree allow you to accept credit cards, debit cards as well as EFTs between bank accounts.</p>
+</div> 
+<div id="chip_email_tooltip"  class="chipTooltip"><p class=orangetext>
+These are typically used to automate email processes, such as sending newsletters or automated responses.</p>
+</div> 
+<div id="Maps_tooltip" class="chipTooltip"><p>
+Embed interactive maps, get directions, and search for places of interest. Get realtime traffic updates.</p>
+</div> 
+<div id="IOT_tooltip" class="chipTooltip"><p class=orangetext>
+These APIs allow developers to create and manage IoT devices, monitor their status, and send and receive data.</p>
+</div> 
+<div id="SMS_tooltip" class="chipTooltip"><p>
+Send automated messages, such as notifications, reminders or promotions, as well as two-way conversations with users..</p>
+</div> 
+<div id="Finance_tooltip" class="chipTooltip"><p>
+Access financial data such as stock prices and currency exchange rates, as well as financial services, such as payments and banking.</p>
+</div>
+<div id="Delivery_tooltip" class="chipTooltip"><p class=orangetext>
+Integrate delivery services to book deliveries, track shipments, manage orders, and more.</p>
+</div> 
+<div id="Chat_tooltip" class="chipTooltip"><p>
+These are typically used to create and manage chat rooms as well as send out messages.</p>
+</div> 
+<div id="CRM_tooltip" class="chipTooltip"><p class=orangetext>
+Intergrate into a CRM (Customer Relationship Management) Software package to improve delivery and experience to your customers.</p>
+</div>
+<div id="ERP_tooltip" class="chipTooltip"><p>
+Intergrate into an ERP (Enterprise Resource Planning) Software package to expand and automate your business processes.</p>
+</div> 
+<div id="Fitness_tooltip" class="chipTooltip"><p class=orangetext>
+Popular health and fitness APIs such as Strava, Fitbit and MyFitnessPal can offer general data, or consented access to users information.</p>
+</div> 
+<div id="Other_tooltip" class="chipTooltip"><p>
+There are millions of APIs out there. We have missed most. We will allow a little extra for one more.</p>
+</div>
+
+</div>
+
+
+<div>
+  <a href="/auth.html">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/features.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  /* - This Block sets the button from the DB - }*/
+
+  window.addEventListener('DOMContentLoaded', function() {
+    {% if currentOption == 'btn_SME' %}
+      changeButton('btn_SME', '#2492bf', '#f39200');
+    {% elif currentOption == 'btn_Startup' %}
+      changeButton('btn_Startup', '#f39200', '#2492bf');
+    {% elif currentOption == 'btn_Corporate' %}
+      changeButton('btn_Corporate', '#2492bf', '#f39200');
+    {% endif %}
+  });
+
+
+  /* - This Block allows for a single selection - */
+  function changeButton(btn_id, btn_color,alt_color) {
+    var button = document.getElementById(btn_id);
+    var buttons = document.getElementsByClassName("btn");
+
+
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].id !== btn_id) {
+        buttons[i].classList.remove("button-true");
+        buttons[i].classList.add("button-false");
+        buttons[i].style.backgroundColor = "#2492bf00";
+        if (buttons[i].classList.contains("blue")) {
+          buttons[i].style.color = '#2492bf';
+        }else { 
+          buttons[i].style.color = '#f39200';
+        }
+      }
+    }
+
+    if (button.classList.contains("button-true")) {
+      button.classList.remove("button-true");
+      button.classList.add("button-false");
+      button.style.backgroundColor = "#2492bf00";
+      button.style.color = btn_color;
+    } else {
+      button.classList.remove("button-false");
+      button.classList.add("button-true");
+      button.style.backgroundColor = btn_color;
+      button.style.color = "white";
+    }
+
+
+    // Send an AJAX request to your server with the btn_id value
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/handle_btn_id');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ btn_id_bus: btn_id, is_button_true: button.classList.contains("button-true") }));
+  }
+  
+
+/* - These are the Hover Functions */
+
+$(document).ready(function() {
+  var timeoutId; // Declare a variable to store the timeout ID
+
+  function activateHoverWithDelay(buttonId, tooltipId) {
+    $(buttonId).hover(function() {
+      timeoutId = setTimeout(function() {
+        $(tooltipId).fadeIn(800);
+      }, 1000); // Set a timeout of 1 second
+
+    }, function() {
+      clearTimeout(timeoutId);// Clear the timeout if the mouse leaves the element
+      $(tooltipId).fadeOut(100);
+    });
+  }
+
+  activateHoverWithDelay("#btn_SME", "#SME_tooltip");
+  activateHoverWithDelay("#btn_Startup", "#Startup_tooltip");
+  activateHoverWithDelay("#btn_Corporate", "#Corporate_tooltip");
+});
+
+
+</script>
+
+
+
+<div class="page-center">
+  <h3 class=selector_title>Select the choice which describes your business best</h3>
+
+
+
+</br>
+
+<div class="button-container">
+
+  <btn id="btn_SME" class="btn blue" onclick="changeButton('btn_SME','#2492bf','#f39200')">
+    <i id="icon_SME" class="fa fa-home blu"></i>
+    <span>SME</span>
+  </btn>
+
+  <btn id="btn_Startup" class="btn orange" onclick="changeButton('btn_Startup','#f39200','#2492bf')" ><i class="fa fa-home orang"></i><span>Start Up</span></btn>
+  
+  <btn  id="btn_Corporate" class="btn blue"  onclick="changeButton('btn_Corporate','#2492bf','#f39200')"><i class="fa fa-home blu"  ></i><span>Corporate</span></btn>
+
+</div> 
+
+
+<!--Write and ID tooltips so they can be styled-->
+
+<div id="SME_tooltip"><p>
+Small or medium  businesses with less capital, less employees and lower volume of sales.  Further choices would be tailored to these specific constraints.</p>
+</div> 
+<div id="Startup_tooltip"><p class="orangetext">
+Startups are typically funded and may be heavy reliant on technology to get to profitability.  Choices would be tailored to these specific requirements.</p>
+</div> 
+<div id="Corporate_tooltip"><p>
+Large Businesses generally have larger budgets and existing systems. New technologies may need to be intergrated into these. </p>
+</div> 
+
+</div>
+
+
+<div>
+  <a href="/">
+    <div class="arrow-button left">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+  </a>
+
+  <a href="/budget.html">
+    <div class="arrow-button right">
+      <i class="fa fa-chevron-right"></i>
+    </div>
+  </a>
+
+</div> 
+
+
+
+
+{% endblock %}
