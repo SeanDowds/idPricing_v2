@@ -1,1 +1,1 @@
-web: gunicorn app:app 
+python -m http.server 8000
