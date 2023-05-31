@@ -29,6 +29,21 @@ import sys
 
 # Connection details extracted from URL by Poe
 
+#Heroku
+conn = pg2.connect(
+    host='ec2-44-213-151-75.compute-1.amazonaws.com',
+    port='5432',
+    dbname='dbk4l88vt08i5e',
+    user='ayfnpuhjmyxsws',
+    password='b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975',
+    sslmode='prefer',
+    connect_timeout=10
+    )
+
+    #postgres://ayfnpuhjmyxsws:b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975@ec2-44-213-151-75.compute-1.amazonaws.com:5432/dbk4l88vt08i5e
+
+
+''' #AWS Lightsale
 conn = pg2.connect(
     host='ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com',
     port='5432',
@@ -38,6 +53,7 @@ conn = pg2.connect(
     sslmode='prefer',
     connect_timeout=10
     )
+'''
 
 def initialSelection():
     c = conn.cursor()

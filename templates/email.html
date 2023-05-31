@@ -45,6 +45,10 @@
             letter-spacing: 0;
         }
 
+        #total_shift{
+            padding-left: 140px
+        }
+
         .par_1 {
             font-family: verdana;
             position: relative;
@@ -52,6 +56,7 @@
             background-color: rgba(255, 255, 255, 1);
             text-align: left;
             font-size: 14px;
+            line-height: 23px;
             padding-bottom: 0;
         }
 
@@ -59,6 +64,7 @@
             font-family: verdana;
             margin: 0;
             padding-bottom: 30px;
+            line-height: 23px;
         }
 
         table {
@@ -165,7 +171,8 @@
             </table>
         </div>
 
-        <h4 class="head_3">Total Cost of App Development:&nbsp;&nbsp;&nbsp;&pound; {{ listTotal }}</h4>
+        <h4 class="head_3"><span>Total Cost of App Development:</span>
+            <span id='total_shift'>&pound; {{ listTotal }}</span></h4>
         <div class="par_1">
             <p>We take great pride in our work and are committed to delivering high-quality apps that meet our clients' needs and expectations. Our team of experienced developers, designers, and project managers will work closely with you to ensure that
                 your app is delivered on time, within budget, and to your satisfaction.</p>
