@@ -26,3 +26,4 @@ Werkzeug==2.3.4
 WTForms==3.0.1
 yagmail==0.15.293
 zope.interface==6.0
+libpcre2-16.so.0>=10.0
