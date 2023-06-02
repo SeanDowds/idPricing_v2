@@ -414,11 +414,19 @@ def sendEmail(pdf_name, userEmail):
         SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD')
         SENDER_SERVER = os.environ.get('SENDER_SERVER')
         
-        yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
+        try:
+            yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
+        # Send email...
+        except Exception as e: 
+            print(f'Error connecting SMTP: {e}')
+        
+        try:
+            yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
+        # Send email...
+        except Exception as e: 
+            print(f'Error sending email with attachments: {e}')
         
         # Send the email with the file attachment
-        yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
-
 
     except Exception as e:
         print('--> Error sending email: %s' % e)
