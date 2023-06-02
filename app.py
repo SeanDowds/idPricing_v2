@@ -24,9 +24,6 @@ from flask_wtf import FlaskForm
 import sys
 
 # Heroku - Remove the following 2 lines
-import dotenv
-dotenv.load_dotenv(dotenv_path="config.env")
-
 
 #Heroku
 conn = pg2.connect(
@@ -405,16 +402,13 @@ def sendEmail(pdf_name, userEmail):
         # Create a yagmail instance using your email account settings
         
         # DELETE THESE IN GITHUB AND USE IN THE ENV_VAR ON SERVER
-        SENDER_EMAIL = os.environ['SENDER_EMAIL']
-        SENDER_PASSWORD = os.environ['SENDER_PASSWORD']
-        SENDER_SERVER = os.environ['SENDER_SERVER']
-        '''
+
         # FOR HEROKU
         SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
         SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD')
         SENDER_SERVER = os.environ.get('SENDER_SERVER')
         yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
-        '''
+        
         
         # Send the email with the file attachment
         yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
