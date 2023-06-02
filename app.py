@@ -11,11 +11,8 @@ import ssl
 
 #for email
 import yagmail
-# from io import BytesIO
 import tempfile
 import logging
-
-# from weasyprint import HTML
 
 import psycopg2 as pg2
 import pdfkit
@@ -24,10 +21,12 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
 
-
 import sys
 
-# Connection details extracted from URL by Poe
+# Heroku - Remove the following 2 lines
+import dotenv
+dotenv.load_dotenv(dotenv_path="config.env")
+
 
 #Heroku
 conn = pg2.connect(
@@ -43,17 +42,17 @@ conn = pg2.connect(
     #postgres://ayfnpuhjmyxsws:b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975@ec2-44-213-151-75.compute-1.amazonaws.com:5432/dbk4l88vt08i5e
 
 
-     #AWS Lightsale
-    #conn = pg2.connect(
-    #host='ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com',
-    #port='5432',
-    #dbname='postgres',
-    #user='dbmasteruser',
-    #password='s*7checkpasswordip[',
-    #sslmode='prefer',
-    #connect_timeout=10
-    #)
-
+''' #AWS Lightsale
+conn = pg2.connect(
+    host='ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com',
+    port='5432',
+    dbname='postgres',
+    user='dbmasteruser',
+    password='s*7:%<}[{n9YG]xa39A4Z;7:nt[*)ip[',
+    sslmode='prefer',
+    connect_timeout=10
+    )
+'''
 
 def initialSelection():
     c = conn.cursor()
@@ -404,10 +403,19 @@ def sendEmail(pdf_name, userEmail):
         text_failure = 'User email failed from ' + userEmail
         
         # Create a yagmail instance using your email account settings
+        
+        # DELETE THESE IN GITHUB AND USE IN THE ENV_VAR ON SERVER
         SENDER_EMAIL = os.environ['SENDER_EMAIL']
-        SENDER_PASSWORD = os.environ['SENDER_PASSWORD']  
+        SENDER_PASSWORD = os.environ['SENDER_PASSWORD']
         SENDER_SERVER = os.environ['SENDER_SERVER']
+        '''
+        # FOR HEROKU
+        SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
+        SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD')
+        SENDER_SERVER = os.environ.get('SENDER_SERVER')
         yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
+        '''
+        
         # Send the email with the file attachment
         yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
 
