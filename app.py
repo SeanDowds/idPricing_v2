@@ -24,14 +24,32 @@ from flask_wtf import FlaskForm
 import sys
 
 # Heroku - Remove the following 2 lines
+#import dotenv
+#dotenv.load_dotenv(dotenv_path="config.env")
+
+'''
+# Heroku - Remove the following 2 lines
+DB_HOST = os.environ['DB_HOST']
+DB_NAME = os.environ['DB_NAME']
+DB_USER = os.environ['DB_USER']
+DB_PASSWORD = os.environ['DB_PASSWORD']
+
+'''
+# HEROKU - ADD THESE INSTEAD:
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+
+
 
 #Heroku
 conn = pg2.connect(
-    host='ec2-44-213-151-75.compute-1.amazonaws.com',
+    host=DB_HOST,
     port='5432',
-    dbname='dbk4l88vt08i5e',
-    user='ayfnpuhjmyxsws',
-    password='b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975',
+    dbname=DB_NAME,
+    user=DB_USER,
+    password=DB_PASSWORD,
     sslmode='prefer',
     connect_timeout=10
     )
@@ -216,25 +234,10 @@ if __name__ == '__main__':
 # Endpoint for LightSail:
 # ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com
 # port for LightSail: 5432
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg2://dbmasteruser:s*7:%<}[{n9YG]xa39A4Z;7:nt[*)ip[@ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com:5432/postgres'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg2://dbmasteruser:s*7:%<}[{n9YG]xa39A4Z;7:nt[*)ip[@ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com:5432/postgres'
 
 # Secret Key used with forms for when it goes on the cloud so it is not hacked
-app.config['SECRET_KEY']="pensil"
-
-'''
-# Create Form Class
-class ContactForm(FlaskForm):     
-   email = StringField('Email ', render_kw={"placeholder": "Email "})
-
-   # Define validator as a method     
-   def valid_email_format(self):
-       # Access self.email.data
-       email = self.email.data
-       ...
-
-   # Use as validator     
-   email = StringField(validators=[self.valid_email_format])
-'''
+# app.config['SECRET_KEY']="pensil"
 
 
 @app.route("/")
@@ -400,21 +403,25 @@ def sendEmail(pdf_name, userEmail):
         text_failure = 'User email failed from ' + userEmail
         
         # Create a yagmail instance using your email account settings
-        
+        '''
         # DELETE THESE IN GITHUB AND USE IN THE ENV_VAR ON SERVER
-
+        SENDER_EMAIL = os.environ['SENDER_EMAIL']
+        SENDER_PASSWORD = os.environ['SENDER_PASSWORD']
+        SENDER_SERVER = os.environ['SENDER_SERVER']
+        '''
         # FOR HEROKU
         SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
         SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD')
         SENDER_SERVER = os.environ.get('SENDER_SERVER')
-        yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
         
+        yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
         
         # Send the email with the file attachment
         yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
 
 
     except Exception as e:
+        print('--> Error sending email: %s' % e)
         logging.error('Error sending email: %s' % e)
         yag.send(to='sean@indetail.tech', subject='Error from userMail - Quote not delivered', contents=[text_failure], attachments=[attachment])
 
