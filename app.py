@@ -49,7 +49,7 @@ conn = pg2.connect(
     #port='5432',
     #dbname='postgres',
     #user='dbmasteruser',
-    #password='s*7:%<}[{n9YG]xa39A4Z;7:nt[*)ip[',
+    #password='s*7checkpasswordip[',
     #sslmode='prefer',
     #connect_timeout=10
     #)
@@ -404,8 +404,8 @@ def sendEmail(pdf_name, userEmail):
         text_failure = 'User email failed from ' + userEmail
         
         # Create a yagmail instance using your email account settings
-        yag = yagmail.SMTP('noreply@indetail.tech', 'ix*)8@agBI2e', 'whuk18.whukhost.com', 465)
-
+        # yag = yagmail.SMTP('noreply@indetail.tech', 'ix*)8@agBI2e', 'whuk18.whukhost.com', 465)
+        yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
         # Send the email with the file attachment
         yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
 
