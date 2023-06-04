@@ -1,13 +1,10 @@
 # This is Python 3.10.11
 
-from flask import Flask, render_template, request, jsonify, make_response, send_file
+from flask import Flask, render_template, request, jsonify, make_response, send_file, session
 import io
 # from datetime import datetime
 
 import os
-# from email.message import EmailMessage
-# import ssl
-# import smtplib
 
 import webbrowser
 
@@ -17,11 +14,11 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
 
-# Heroku - Remove the following 2 lines
-#import dotenv
-#dotenv.load_dotenv(dotenv_path="config.env")
 
-'''
+# Heroku - Remove the following 2 lines
+import dotenv
+dotenv.load_dotenv(dotenv_path="config.env")
+
 # Heroku - Remove the following lines
 DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['DB_NAME']
@@ -34,7 +31,7 @@ DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
-
+'''
 
 #Heroku
 conn = pg2.connect(
@@ -102,8 +99,6 @@ def clearAllDB():
     # Commit the changes
     conn.commit()
 
-    # Close the connection
-    # conn.close()
 
 
 def updateBtnSelection(optionBus, optionApp, optionQuality, optionAuth):
@@ -126,7 +121,7 @@ def updateBtnSelection(optionBus, optionApp, optionQuality, optionAuth):
 
 
 def updateRangeSelection(budget_value, user_volume):
-    #conn = sqlite3.connect('db/appPrice.db')
+
     c = conn.cursor()
 
     # Insert a new row into the "currentSelection" table
@@ -135,14 +130,12 @@ def updateRangeSelection(budget_value, user_volume):
     if user_volume:
         c.execute("UPDATE currentSelection SET userVolume = %s WHERE id = 2", (user_volume,))
 
-
     # Commit the changes to the database
     conn.commit()
 
 
 def updateChipSelection(allChips, selectedChips):
 
-    #conn = sqlite3.connect('db/appPrice.db')
     c = conn.cursor()
 
     integerList = createIntegerList(allChips, selectedChips)
@@ -211,6 +204,7 @@ def retrieveCurrentValue(my_column):
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'your secret key here'
 
 # Execute the init_db.py script on startup of the app
 select = initialSelection()
@@ -342,34 +336,17 @@ def handle_features():
     return ''
 
 
-@app.route('/open_html')
-def open_html():
+@app.route('/render_quote')
+def render_quote():
+    
+    #Collect variables from js in final.html
+    name = request.args.get('name')
+    email = request.args.get('email')
 
-    filename = 'templates/email.html'
-    webbrowser.open_new_tab(filename)
-    print(350, name, email)
-    return render_template('email.html')
-
-
-@app.route('/handle_formdata', methods=['POST'])
-def handle_formdata():
-    # Get form data 
-    name = request.form.get('name') 
-    email = request.form.get('email')
-
-    # Generate unique PDF name
-    pdf_name = 'inDetailQuote_' + name + '.pdf'
-
-    # Call onSubmitButtonPressed function to get quote data
+    # Call onSubmitButtonPressed function to get quote data  sen@dow.com
     itemList, listTotal = onSubmitButtonPressed(name, email)
 
-    # Render the web template with the quote data in a new tab
-    return render_template('/email.html', name=name.capitalize(), email=email, itemList=itemList, listTotal=listTotal)
-
-
-@app.route('/email.html', methods=['POST'])
-def email():
-  return f'The result is: {"Seadow"}'
+    return render_template('email.html', name=name.capitalize(), email=email, itemList=itemList, listTotal=listTotal)
 
 
 def priceTable():
@@ -639,15 +616,15 @@ def fetchSelectedRecords():
 
 
 def onSubmitButtonPressed(userName, userEmail):
-    print(675)
+
     selectedRecords = fetchSelectedRecords()
-    print(677)
+
     printList, total = createPrintList(selectedRecords)
-    print(679)
+
     # SAVE QUOTE TO DB
 
     clearAllDB()
-    print(683)
+
     return printList, total
 
 
