@@ -17,15 +17,34 @@
             font-family: verdana;
         }
 
+        {
+            align-content: center;
+        }
+
+
+        .media {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          margin: auto;
+          overflow-y: scroll;
+        }
+
         page {
           position: relative;
           background: white;
           display: block;
           box-shadow: 0 0 0.3cm;
           background: white;
-          width: 100%;
-          min-height: 1225px;
-          margin: 0;
+          width: 21cm;
+          min-height: 30.5cm; /* previously height:30.5cm; */
+          padding: 40px;
+          height: auto;
         }
         
         .head_3,.par_1,.par_2{
@@ -46,7 +65,7 @@
         }
 
         #total_shift{
-            padding-left: 140px
+            padding-left: 80px
         }
 
         .par_1 {
@@ -110,7 +129,7 @@
             position: absolute;
             left: 0;
             right: 0;
-            color: #000;
+            bottom: 0;
             padding-top: 5mm;
             padding-bottom: 5mm;
             background-color: #3f4f54;
@@ -143,8 +162,9 @@
 </head>
 
 <body>
+    <div class=media>
     <page id="content">
-        <img src="http://localhost:5000/static/logo.png" alt="logo" style="display: block; margin: 0 auto; max-width: 250px; max-height: 250px;">
+        <img src="http://localhost:5000/static/logo.png" alt="logo" style="display: block; margin: 0 auto; max-width: 200px; max-height: 200px;">
         <br>
 
         <div class="par_1">
@@ -182,14 +202,19 @@
             <p>If you have any questions about the quote or would like to discuss your project further, please don't hesitate to contact us. We would be more than happy to answer any questions you may have.
             </p>
         </div>
+        <br>
 
+        <footer>
+            <span class="footer-left">website@indetail.tech</span>
+            <span class="footer-center">inDetail Tech LTD Reg No: 14761091</span>
+            <span class="footer-right">www.indetail.tech</span>
+        </footer>
 
     </page>
-    <footer>
-        <span class="footer-left">website@indetail.tech</span>
-        <span class="footer-center">inDetail Tech LTD Reg No: 14761091</span>
-        <span class="footer-right">www.indetail.tech</span>
-    </footer>
+    
+
+</div>
+
 
 </body>
 

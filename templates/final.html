@@ -9,19 +9,20 @@
   <br>
   <br>
   <p>
-    Before we show the estimate, we should remind you that applications are as unique and complexed as the businesses that use them.
+    Before we show the estimate, bear in mind that applications are as unique and complexed as the businesses that use them.
   </p>
   <div>
 
   </div>
   <p>
-    We will need to send you an automated email that describe the details to the price.  You can generate as many quotes as you wish.  Our intention is that you get the best value for your budget. Contact us for further advice.
+    We will need to send you an estimate that describe the details to the price in a new tab.  You can generate as many quotes as you wish.  Our intention is that you get the best value for your budget. Please use the same email for reference.
   </p>
   <br>
 
   <div id=formdiv3 class="align center">
 
-    <form id="myform">
+
+    <form id="myform" method="POST" action="/handle_formdata" target="_blank">
       <div class="form-row">
         <label for="name">Name:</label>
         <input type="text" class="inputbox" id="name" name="name">
@@ -31,7 +32,7 @@
         <input type="email" class="inputbox" id="email" name="email">
       </div>
       <div class="form-row">
-        <button id="submitbtn" type="submit">Submit</button>
+        <button id="submitbtn" type="submit">Calculate</button>
       </div>
     </form>
 
@@ -76,9 +77,9 @@ submitBtn.addEventListener("click", (event) => {
   })
   .then((response) => {
     if (response.ok) {
-      return "Thankyou - Check your email."; // Convert the response to text
+      return "Thankyou - Your estimate is open."; // Convert the response to text
     } else {
-      throw new Error('Form submission failed');
+      throw new Error('Form submission failed', error);
     }
   })
   .then((data) => {
@@ -87,7 +88,9 @@ submitBtn.addEventListener("click", (event) => {
   .catch((error) => {
     responseEl.innerHTML = error.message; // Set the HTML of the response element to the error message
   });
+  
 });
+
 
 
 
