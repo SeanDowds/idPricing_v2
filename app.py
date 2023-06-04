@@ -5,8 +5,8 @@ import io
 # from datetime import datetime
 
 import os
-from email.message import EmailMessage
-import ssl
+# from email.message import EmailMessage
+# import ssl
 # import smtplib
 
 import webbrowser
@@ -18,10 +18,10 @@ from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
 
 # Heroku - Remove the following 2 lines
-import dotenv
-dotenv.load_dotenv(dotenv_path="config.env")
+#import dotenv
+#dotenv.load_dotenv(dotenv_path="config.env")
 
-
+'''
 # Heroku - Remove the following lines
 DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['DB_NAME']
@@ -34,7 +34,7 @@ DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
-'''
+
 
 #Heroku
 conn = pg2.connect(
