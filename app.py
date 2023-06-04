@@ -1,6 +1,7 @@
 # This is Python 3.10.11
 
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, send_file
+import io
 # from datetime import datetime
 
 import os
@@ -8,27 +9,20 @@ from email.message import EmailMessage
 import ssl
 # import smtplib
 
-
-#for email
-import yagmail
-import tempfile
-import logging
+import webbrowser
 
 import psycopg2 as pg2
-import pdfkit
 
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
 
-import sys
-
 # Heroku - Remove the following 2 lines
-#import dotenv
-#dotenv.load_dotenv(dotenv_path="config.env")
+import dotenv
+dotenv.load_dotenv(dotenv_path="config.env")
 
-'''
-# Heroku - Remove the following 2 lines
+
+# Heroku - Remove the following lines
 DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['DB_NAME']
 DB_USER = os.environ['DB_USER']
@@ -40,8 +34,7 @@ DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
-
-
+'''
 
 #Heroku
 conn = pg2.connect(
@@ -80,7 +73,7 @@ def initialSelection():
 
     # Close the cursor #excluded for sqlite
     c.close()
-
+    print(f'Data from intial selections -=> {data}')
     # Return the data #excluded for sqlite
     return data
 
@@ -216,7 +209,6 @@ def retrieveCurrentValue(my_column):
     return(value)
 
 
-
 app = Flask(__name__)
 
 
@@ -226,18 +218,6 @@ select = initialSelection()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
-
-
-# Configuration for use in postgres on Huroku
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['postgres://ayfnpuhjmyxsws:b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975@ec2-44-213-151-75.compute-1.amazonaws.com:5432/dbk4l88vt08i5e']
-
-# Endpoint for LightSail:
-# ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com
-# port for LightSail: 5432
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg2://dbmasteruser:s*7:%<}[{n9YG]xa39A4Z;7:nt[*)ip[@ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com:5432/postgres'
-
-# Secret Key used with forms for when it goes on the cloud so it is not hacked
-# app.config['SECRET_KEY']="pensil"
 
 
 @app.route("/")
@@ -362,9 +342,13 @@ def handle_features():
     return ''
 
 
-def generate_pdf(html, pdf_name):
-    with app.app_context():
-       pdfkit.from_string(html, pdf_name)
+@app.route('/open_html')
+def open_html():
+
+    filename = 'templates/email.html'
+    webbrowser.open_new_tab(filename)
+    print(350, name, email)
+    return render_template('email.html')
 
 
 @app.route('/handle_formdata', methods=['POST'])
@@ -372,66 +356,20 @@ def handle_formdata():
     # Get form data 
     name = request.form.get('name') 
     email = request.form.get('email')
-    successMsg = ''
 
     # Generate unique PDF name
     pdf_name = 'inDetailQuote_' + name + '.pdf'
 
+    # Call onSubmitButtonPressed function to get quote data
     itemList, listTotal = onSubmitButtonPressed(name, email)
-    
-    html = render_template('email.html', 
-        name=name.capitalize(), email=email, itemList=itemList, listTotal=listTotal)
 
-    # Call function to generate PDF
-    generate_pdf(html, pdf_name)
-
-    successMsg = sendEmail(pdf_name, email)
-
-    # successMsg should be sent back to the final.htlm to a div to show success or failure
-
-    return ''
+    # Render the web template with the quote data in a new tab
+    return render_template('/email.html', name=name.capitalize(), email=email, itemList=itemList, listTotal=listTotal)
 
 
-def sendEmail(pdf_name, userEmail):
-    print(f'({userEmail=}_______________this is the user email!)')
-    try:
-        logging.info('Sending email...')
-        # Get the PDF file path 
-        attachment = pdf_name #/path/to/file.pdf'
-
-        text_content = 'Thank you for interest in our services. \nA detailed quote is attached.'
-        text_failure = 'User email failed from ' + userEmail
-        
-        # Create a yagmail instance using your email account settings
-        '''
-        # DELETE THESE IN GITHUB AND USE IN THE ENV_VAR ON SERVER
-        SENDER_EMAIL = os.environ['SENDER_EMAIL']
-        SENDER_PASSWORD = os.environ['SENDER_PASSWORD']
-        SENDER_SERVER = os.environ['SENDER_SERVER']
-        '''
-        # FOR HEROKU
-        SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
-        SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD')
-        SENDER_SERVER = os.environ.get('SENDER_SERVER')
-        
-        try:
-            yag = yagmail.SMTP(SENDER_EMAIL, SENDER_PASSWORD, SENDER_SERVER, 465)
-        # Send email...
-        except Exception as e: 
-            print(f'Error connecting SMTP: {e}')
-        
-        try:
-            yag.send(to=userEmail, subject='Quote details from inDetail.tech', contents=[text_content], attachments=[attachment])
-        # Send email...
-        except Exception as e: 
-            print(f'Error sending email with attachments: {e}')
-        
-        # Send the email with the file attachment
-
-    except Exception as e:
-        print('--> Error sending email: %s' % e)
-        logging.error('Error sending email: %s' % e)
-        yag.send(to='sean@indetail.tech', subject='Error from userMail - Quote not delivered', contents=[text_failure], attachments=[attachment])
+@app.route('/email.html', methods=['POST'])
+def email():
+  return f'The result is: {"Seadow"}'
 
 
 def priceTable():
@@ -694,18 +632,22 @@ def fetchSelectedRecords():
             print (f'feature: {fDict}: {thisAmnt} and {thisWeight}')
     print('______________________________________________________')
 
+    print(f'{itemRecords=}')
+
+    print('______________________________________________________')
     return itemRecords
 
 
 def onSubmitButtonPressed(userName, userEmail):
-
+    print(675)
     selectedRecords = fetchSelectedRecords()
-
+    print(677)
     printList, total = createPrintList(selectedRecords)
-
+    print(679)
     # SAVE QUOTE TO DB
-    clearAllDB()
 
+    clearAllDB()
+    print(683)
     return printList, total
 
 
