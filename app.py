@@ -14,22 +14,6 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
 
-'''
-# LOCAL - Remove the following 2 lines for Heroku
-import dotenv
-dotenv.load_dotenv(dotenv_path="config.env")
-
-# LOCAL - Remove the following lines for Heroku
-DB_HOST = os.environ['DB_HOST']
-DB_NAME = os.environ['DB_NAME']
-DB_USER = os.environ['DB_USER']
-DB_PASSWORD = os.environ['DB_PASSWORD']
-
-
-FLASK_ENV = "development"
-env = FLASK_ENV 
-
-'''
 # HEROKU - ADD THESE INSTEAD:
 DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
@@ -48,20 +32,6 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-        #postgres://ayfnpuhjmyxsws:b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975@ec2-44-213-151-75.compute-1.amazonaws.com:5432/dbk4l88vt08i5e
-        #postgres://joeahnirjlifnu:d812de1014fd81d9a476e45b3e7446655be39e8b8a37a2ac12b2a8cd82063c4a@ec2-52-3-81-13.compute-1.amazonaws.com:5432/dnt7oc0n8ddn6
-
-''' #AWS Lightsale
-conn = pg2.connect(
-    host='ls-74298ef97d6b5b45738cb51f40aad70ec35f056d.couqkmnifact.eu-west-2.rds.amazonaws.com',
-    port='5432',
-    dbname='postgres',
-    user='dbmasteruser',
-    password='s*7:%<}[{n9YG]xa39A4Z;7:nt[*)ip[',
-    sslmode='prefer',
-    connect_timeout=10
-    )
-'''
 
 def initialSelection():
     c = conn.cursor()
@@ -267,10 +237,6 @@ def recordQuoteValues(estimate_id, items, total):
     SQL_values += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     values = (estimate_id, "values", str(total)) + tuple(amnts)
 
-    '''
-    if len(values) != SQL_values.count('?'):
-        raise ValueError(f"Number of placeholders and values don't match! {len(values)=} {SQL.count('?')=}")
-    '''
     c.execute(SQL_values, values)
     c.close()
     conn.commit()
