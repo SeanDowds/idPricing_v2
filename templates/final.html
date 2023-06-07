@@ -15,14 +15,13 @@
 
   </div>
   <p>
-    We will need to send you an estimate that describe the details to the price in a new tab.  You can generate as many quotes as you wish.  Our intention is that you get the best value for your budget. Please use the same email for reference.
+    We will open a new tab with the estimate that describe the details to the price.  You can generate as many as you wish.  Our intention is that you iterate the best value for your budget. Contact us for further advice.
   </p>
   <br>
 
   <div id=formdiv3 class="align center">
 
-
-    <form id="myform" method="POST" action="/handle_formdata" target="_blank">
+    <form id="myform" action="#" method="post" onsubmit="openWindow()">
       <div class="form-row">
         <label for="name">Name:</label>
         <input type="text" class="inputbox" id="name" name="name">
@@ -32,17 +31,14 @@
         <input type="email" class="inputbox" id="email" name="email">
       </div>
       <div class="form-row">
-        <button id="submitbtn" type="submit">Calculate</button>
+        <button id="submitbtn" type="submit">Submit</button>
       </div>
     </form>
-
 
     <p id="response"></p>
 
   </div>
-
 </div>
-
 </div>
 
 <div>
@@ -62,37 +58,12 @@
 
 <script>
 
-const form = document.getElementById("myform");
-const submitBtn = document.getElementById("submitbtn");
-const responseEl = document.getElementById("response");
-
-submitBtn.addEventListener("click", (event) => {
-  event.preventDefault(); // Prevents the default form submission behavior
-
-  const formData = new FormData(form); // Creates a new FormData object with the form data
-
-  fetch("/handle_formdata", {
-    method: "POST",
-    body: formData,
-  })
-  .then((response) => {
-    if (response.ok) {
-      return "Thankyou - Your estimate is open."; // Convert the response to text
-    } else {
-      throw new Error('Form submission failed', error);
-    }
-  })
-  .then((data) => {
-    responseEl.innerHTML = data; // Set the HTML of the response element to the response message
-  })
-  .catch((error) => {
-    responseEl.innerHTML = error.message; // Set the HTML of the response element to the error message
-  });
+function openWindow() {
+  let name = document.getElementById('name').value;
+  let email = document.getElementById('email').value;
   
-});
-
-
-
+  window.open("/render_quote?name=" + name + "&email=" + email, "_blank");   
+}
 
 
 </script>

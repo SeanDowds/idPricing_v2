@@ -1,13 +1,10 @@
 # This is Python 3.10.11
 
-from flask import Flask, render_template, request, jsonify, make_response, send_file
+from flask import Flask, render_template, request, jsonify, make_response, send_file, session
 import io
-# from datetime import datetime
+import datetime
 
 import os
-# from email.message import EmailMessage
-# import ssl
-# import smtplib
 
 import webbrowser
 
@@ -17,16 +14,20 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
 
-# Heroku - Remove the following 2 lines
-#import dotenv
-#dotenv.load_dotenv(dotenv_path="config.env")
 
-'''
-# Heroku - Remove the following lines
+# LOCAL - Remove the following 2 lines for Heroku
+import dotenv
+dotenv.load_dotenv(dotenv_path="config.env")
+
+# LOCAL - Remove the following lines for Heroku
 DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['DB_NAME']
 DB_USER = os.environ['DB_USER']
 DB_PASSWORD = os.environ['DB_PASSWORD']
+
+
+FLASK_ENV = "development"
+env = FLASK_ENV 
 
 '''
 # HEROKU - ADD THESE INSTEAD:
@@ -34,7 +35,7 @@ DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
-
+'''
 
 #Heroku
 conn = pg2.connect(
@@ -47,8 +48,8 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-    #postgres://ayfnpuhjmyxsws:b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975@ec2-44-213-151-75.compute-1.amazonaws.com:5432/dbk4l88vt08i5e
-
+        #postgres://ayfnpuhjmyxsws:b595e0ce91245d2a73c2d7cb9f6350e43b03356dd98a349c139924b628687975@ec2-44-213-151-75.compute-1.amazonaws.com:5432/dbk4l88vt08i5e
+        #postgres://joeahnirjlifnu:d812de1014fd81d9a476e45b3e7446655be39e8b8a37a2ac12b2a8cd82063c4a@ec2-52-3-81-13.compute-1.amazonaws.com:5432/dnt7oc0n8ddn6
 
 ''' #AWS Lightsale
 conn = pg2.connect(
@@ -78,7 +79,6 @@ def initialSelection():
     return data
 
 
-
 def clearAllDB():
 
     # Connect to the database
@@ -87,10 +87,8 @@ def clearAllDB():
     # Get the values for the row with id=1
     c.execute("SELECT * FROM currentSelection WHERE id = 1")
     row1_values = c.fetchone()
-
     
     c.execute("DELETE FROM currentSelection WHERE id = 2")
-
 
     sql = "INSERT INTO currentSelection (id, business, appType, qualityType, authType, budgetValue, userVolume, chip_Dashboard, chip_StaffManagement, chip_CustomerManagement, chip_Activity, chip_Ratings, chip_Animations, chip_Analytics, chip_QRCodes, chip_Calculator, chip_Video, chip_Upload, chip_Calendar, chip_Otherfeature, chip_Payments, chip_email, chip_Maps, chip_IOT, chip_SMS, chip_Finance, chip_Delivery, chip_Chat, chip_CRM, chip_ERP, chip_Fitness, chip_Other) "
     sql += "SELECT 2, business, appType, qualityType, authType, budgetValue, userVolume, chip_Dashboard, chip_StaffManagement, chip_CustomerManagement, chip_Activity, chip_Ratings, chip_Animations, chip_Analytics, chip_QRCodes, chip_Calculator, chip_Video, chip_Upload, chip_Calendar, chip_Otherfeature, chip_Payments, chip_email, chip_Maps, chip_IOT, chip_SMS, chip_Finance, chip_Delivery, chip_Chat, chip_CRM, chip_ERP,chip_Fitness, chip_Other "
@@ -98,12 +96,12 @@ def clearAllDB():
     sql += "WHERE id = 1"
 
     c.execute(sql)
+    c.close()
 
     # Commit the changes
     conn.commit()
 
-    # Close the connection
-    # conn.close()
+
 
 
 def updateBtnSelection(optionBus, optionApp, optionQuality, optionAuth):
@@ -126,7 +124,7 @@ def updateBtnSelection(optionBus, optionApp, optionQuality, optionAuth):
 
 
 def updateRangeSelection(budget_value, user_volume):
-    #conn = sqlite3.connect('db/appPrice.db')
+
     c = conn.cursor()
 
     # Insert a new row into the "currentSelection" table
@@ -135,14 +133,13 @@ def updateRangeSelection(budget_value, user_volume):
     if user_volume:
         c.execute("UPDATE currentSelection SET userVolume = %s WHERE id = 2", (user_volume,))
 
-
     # Commit the changes to the database
     conn.commit()
+    print(f'138 retreived Uses sent to pgAdmin = {user_volume}')
 
 
 def updateChipSelection(allChips, selectedChips):
 
-    #conn = sqlite3.connect('db/appPrice.db')
     c = conn.cursor()
 
     integerList = createIntegerList(allChips, selectedChips)
@@ -169,7 +166,6 @@ def createIntegerList(fullList, selectedList):
     return(integerList)
 
 
-
 def listCurrentChips(listOfColumns):
 
     listCurrentChips = []
@@ -188,8 +184,6 @@ def listCurrentChips(listOfColumns):
     # Close the cursor and the connection
     c.close()
 
-    # conn.close() 
-
     return(listCurrentChips)
 
 
@@ -202,6 +196,7 @@ def retrieveCurrentValue(my_column):
     c = conn.cursor()
     c.execute(query)
     value = c.fetchone()[0]
+    print(f'198 retreived Uses from pgAdmin = {value}')
 
     # Close the cursor ,not the connection
     c.close()
@@ -209,8 +204,82 @@ def retrieveCurrentValue(my_column):
     return(value)
 
 
+def recordNewUser(name, email):
+    c = conn.cursor()
+    
+    query = "SELECT EXISTS(SELECT 1 FROM users WHERE email = %s)" 
+    c.execute(query, (email,))
+    email_exists = c.fetchone()[0]
+      
+    if not email_exists:
+       query = "INSERT INTO users (name, email) VALUES (%s, %s)"
+       c.execute(query, (name, email)) 
+       conn.commit()
+
+
+def recordQuoteDetails(email):
+    c = conn.cursor()
+    c.execute("SELECT * FROM currentSelection WHERE id = 2")
+    row1_values = c.fetchone()
+
+    email = email 
+    created_at = datetime.datetime.now()
+
+    SQL = "INSERT INTO estimate_variables (email,created_at, business,apptype,qualitytype,authtype,budgetvalue, uservolume, chip_other, chip_crm, chip_erp, chip_fitness, chip_dashboard, chip_staffmanagement, chip_customermanagement, chip_activity, chip_ratings, chip_animations, chip_analytics, chip_qrcodes, chip_calculator, chip_video, chip_upload, chip_calendar, chip_otherfeature, chip_payments, chip_email, chip_maps, chip_iot, chip_sms, chip_finance, chip_delivery, chip_chat)"
+    SQL += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values = (email, created_at) + row1_values[1:]
+
+    c.execute(f"{SQL} RETURNING id", values)
+
+    id = c.fetchone()[0]
+
+    conn.commit()
+
+    return id
+
+
+def recordQuoteValues(estimate_id, items, total):
+
+    itemsLen=len(items)
+
+    descriptions = [item[0] for item in items]
+    amnts = [item[1] for item in items]
+
+    # now add these to the db with a ref to the estimate_id for each one - Both TEXT CHARVAR(10)
+    # Then add the list total INT to the DB
+
+    num_elements_to_add = 35 - len(items)
+
+    new_elements = [None for _ in range(num_elements_to_add)]
+    descriptions.extend(new_elements)
+    amnts.extend(new_elements)
+
+    c = conn.cursor()
+
+    SQL_descriptions = "INSERT INTO estimate_descriptions (estimate_id,Row_type,total,col_1,col_2,col_3,col_4,col_5,col_6,col_7,col_8,col_9,col_10,col_11,col_12,col_13,col_14,col_15,col_16,col_17,col_18,col_19,col_20,col_21,col_22,col_23,col_24,col_25,col_26,col_27,col_28,col_29,col_30,col_31,col_32,col_33,col_34,col_35)"
+    SQL_descriptions += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    descriptions = (estimate_id, "descriptions", "TOTAL") + tuple(descriptions)
+
+    c.execute(SQL_descriptions, descriptions)
+
+
+    SQL_values = "INSERT INTO estimate_values (estimate_id, Row_type, total,col_1,col_2,col_3,col_4,col_5,col_6,col_7,col_8,col_9,col_10,col_11,col_12,col_13,col_14,col_15,col_16,col_17,col_18,col_19,col_20,col_21,col_22,col_23,col_24,col_25,col_26,col_27,col_28,col_29,col_30,col_31,col_32,col_33,col_34,col_35)"
+    SQL_values += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values = (estimate_id, "values", str(total)) + tuple(amnts)
+
+    '''
+    if len(values) != SQL_values.count('?'):
+        raise ValueError(f"Number of placeholders and values don't match! {len(values)=} {SQL.count('?')=}")
+    '''
+    c.execute(SQL_values, values)
+    c.close()
+    conn.commit()
+
+
+
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'your secret key here'
 
 # Execute the init_db.py script on startup of the app
 select = initialSelection()
@@ -305,6 +374,7 @@ def handle_range_value():
     data = request.get_json()
     budget_value = data.get('budget_value')
     user_volume = data.get('user_volume')
+    print(f'375 Now {user_volume = }')
     
     # Do something with the slider_value parameter here
 
@@ -342,34 +412,25 @@ def handle_features():
     return ''
 
 
-@app.route('/open_html')
-def open_html():
+@app.route('/render_quote')
+def render_quote():
+    
+    #Collect variables from js in final.html
+    name = request.args.get('name')
+    email = request.args.get('email')
 
-    filename = 'templates/email.html'
-    webbrowser.open_new_tab(filename)
-    print(350, name, email)
-    return render_template('email.html')
+    # Call priceCalculations function to get quote data  sen@dow.com
+    itemList, listTotal = priceCalculations(name, email)
 
+    recordNewUser(name, email)
 
-@app.route('/handle_formdata', methods=['POST'])
-def handle_formdata():
-    # Get form data 
-    name = request.form.get('name') 
-    email = request.form.get('email')
+    estimate_id = recordQuoteDetails(email)
 
-    # Generate unique PDF name
-    pdf_name = 'inDetailQuote_' + name + '.pdf'
+    recordQuoteValues(estimate_id, itemList, listTotal)
 
-    # Call onSubmitButtonPressed function to get quote data
-    itemList, listTotal = onSubmitButtonPressed(name, email)
+    clearAllDB()
 
-    # Render the web template with the quote data in a new tab
-    return render_template('/email.html', name=name.capitalize(), email=email, itemList=itemList, listTotal=listTotal)
-
-
-@app.route('/email.html', methods=['POST'])
-def email():
-  return f'The result is: {"Seadow"}'
+    return render_template('email.html', name=name.capitalize(), email=email, itemList=itemList, listTotal=listTotal)
 
 
 def priceTable():
@@ -403,13 +464,13 @@ def priceTable():
     },
     'intergrations':{
         'payments':{'amnt':700, 'weight':1},
-        'email':{'amnt':500, 'weight':1},
+        'email':{'amnt':600, 'weight':1},
         'maps':{'amnt':500, 'weight':1},
         'iot':{'amnt':1000, 'weight':1.1},
         'sms':{'amnt':400, 'weight':1},
         'finance':{'amnt':1000, 'weight':1.1},
-        'delivery':{'amnt':1100, 'weight':1.1},
-        'chat':{'amnt':1000, 'weight':1},
+        'delivery':{'amnt':1000, 'weight':1.1},
+        'chat':{'amnt':900, 'weight':1},
         'crm':{'amnt':1000, 'weight':1.2},
         'erp':{'amnt':1000, 'weight':1.1},
         'fitness':{'amnt':1000, 'weight':1},
@@ -425,13 +486,12 @@ def priceTable():
         'Analytics':{'amnt':600, 'weight':1.15},
         'QRCodes':{'amnt':150, 'weight':1},
         'tools':{'amnt':150, 'weight':1},
-        'video':{'amnt':150, 'weight':1},
+        'video':{'amnt':180, 'weight':1},
         'upload':{'amnt':150, 'weight':1},
         'calendar':{'amnt':250, 'weight':1.15},
         'other':{'amnt':250, 'weight':1},
     },
     }
-
     return dict
 
 
@@ -482,6 +542,7 @@ def createPrintList(summaryList):
                 except ValueError:  
                     itemName = each[0].capitalize()
                 else:
+                    print(f'543 backend: {each[0]=}')
                     itemName = 'Backend algorithms, structure and Database:'
             
 
@@ -505,7 +566,7 @@ def fetchSelectedRecords():
 
     priceDict=priceTable()
     print('These are the amnts and weights for key choices')
-
+    print(f'568 users now => {retrieveCurrentValue("userVolume")=}')
     totalPrice = 0
     totalWeight = 1
     itemRecords = []
@@ -572,10 +633,11 @@ def fetchSelectedRecords():
 
     # Retreive the records for userVolume from the DB, allocate amnt and weight
     # from the dict, and store them itemsRecord List
-    if retrieveCurrentValue('userVolume') == 0:
+    print(f'635 users now => {retrieveCurrentValue("userVolume")=}')
+    if retrieveCurrentValue('userVolume') <= 20:
         userVolAmnt = priceDict['users']['None']['amnt']
         userVolWeight = priceDict['users']['None']['weight']
-    elif 0 < retrieveCurrentValue('userVolume') < 100:
+    elif 20 < retrieveCurrentValue('userVolume') < 100:
         userVolAmnt = priceDict['users']['<100']['amnt']
         userVolWeight = priceDict['users']['<100']['weight']
     elif 100 <= retrieveCurrentValue('userVolume') < 1000:
@@ -630,24 +692,16 @@ def fetchSelectedRecords():
             totalFeaturesWeight *= thisWeight
             itemRecords.append([fDict, thisAmnt, thisWeight])
             print (f'feature: {fDict}: {thisAmnt} and {thisWeight}')
-    print('______________________________________________________')
 
-    print(f'{itemRecords=}')
-
-    print('______________________________________________________')
     return itemRecords
 
 
-def onSubmitButtonPressed(userName, userEmail):
-    print(675)
-    selectedRecords = fetchSelectedRecords()
-    print(677)
-    printList, total = createPrintList(selectedRecords)
-    print(679)
-    # SAVE QUOTE TO DB
+def priceCalculations(userName, userEmail):
 
-    clearAllDB()
-    print(683)
+    selectedRecords = fetchSelectedRecords()
+
+    printList, total = createPrintList(selectedRecords)
+
     return printList, total
 
 
