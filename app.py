@@ -14,7 +14,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
 
-
+'''
 # LOCAL - Remove the following 2 lines for Heroku
 import dotenv
 dotenv.load_dotenv(dotenv_path="config.env")
@@ -35,7 +35,7 @@ DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
-'''
+
 
 #Heroku
 conn = pg2.connect(
