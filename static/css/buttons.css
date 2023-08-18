@@ -98,8 +98,8 @@ border-radius: 15px;
   color: var(--secondary-orange);
 }
 
-.fa fa-building {
-  padding-bottom: 20px;
+.fa-building {
+  margin-right: 10px;
 }
 
 #submitbtn {
