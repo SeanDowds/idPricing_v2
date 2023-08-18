@@ -94,13 +94,19 @@ border-radius: 15px;
 .button-true .orang {
   color: white;
 }
+
 .button-false .orang {
   color: var(--secondary-orange);
 }
 
-.fa-building .fa-paper-plane {
+.fa-paper-plane {
   margin-bottom: 8px;
 }
+
+.fa-building {
+  margin-bottom: 8px;
+}
+
 
 #submitbtn {
   border-radius: 15px;
