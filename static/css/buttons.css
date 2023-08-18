@@ -98,6 +98,10 @@ border-radius: 15px;
   color: var(--secondary-orange);
 }
 
+.fa fa-building {
+  margin-bottom: 10px;
+}
+
 #submitbtn {
   border-radius: 15px;
   display: flex;
