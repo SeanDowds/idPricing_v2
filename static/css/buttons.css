@@ -107,7 +107,11 @@ border-radius: 15px;
   margin-bottom: 8px;
 }
 
-.fa-envelope .fa-facebook-official {
+.fa-envelope {
+  margin-bottom: 8px;
+}
+
+.fa-facebook-official {
   margin-bottom: 8px;
 }
 
