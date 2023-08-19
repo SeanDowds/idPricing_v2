@@ -412,9 +412,9 @@ def priceTable():
         'WM':{'amnt':550, 'weight':1.2},
     },
     'quality':{
-        'MVP':{'amnt':0, 'weight':1},
-        'UI':{'amnt':150, 'weight':1.3},
-        'UX':{'amnt':200, 'weight':1.4},
+        'MVP':{'amnt':0, 'weight':0.9},
+        'UI':{'amnt':170, 'weight':1.2},
+        'UX':{'amnt':200, 'weight':1.3},
     },    
     'auth':{
         'noAuth':{'amnt':0, 'weight':1},
@@ -437,13 +437,13 @@ def priceTable():
         'finance':{'amnt':1000, 'weight':1.1},
         'delivery':{'amnt':1000, 'weight':1.1},
         'chat':{'amnt':900, 'weight':1},
-        'crm':{'amnt':1000, 'weight':1.2},
+        'crm':{'amnt':1000, 'weight':1.1},
         'erp':{'amnt':1000, 'weight':1.1},
         'fitness':{'amnt':1000, 'weight':1},
         'other':{'amnt':1000, 'weight':1.1},
     },
     'features':{
-        'dashboard':{'amnt':1000, 'weight':1.2},
+        'dashboard':{'amnt':1000, 'weight':1.1},
         'staffMan':{'amnt':1000, 'weight':1.1},
         'customerMan':{'amnt':1000, 'weight':1.2},
         'activity':{'amnt':300, 'weight':1.1},
