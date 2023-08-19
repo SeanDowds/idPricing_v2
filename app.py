@@ -413,7 +413,7 @@ def priceTable():
     },
     'quality':{
         'MVP':{'amnt':0, 'weight':0.9},
-        'UI':{'amnt':170, 'weight':1.2},
+        'UI':{'amnt':170, 'weight':1.15},
         'UX':{'amnt':200, 'weight':1.3},
     },    
     'auth':{
