@@ -90,13 +90,17 @@ $(document).ready(function() {
 <div class="button-container">
 
   <btn id="btn_NoAuth" class="btn blue" onclick="changeButton('btn_NoAuth','#2492bf','#f39200')">
-    <i id="icon_NoAuth" class="fa fa-home blu"></i>
+    <i id="icon_NoAuth" class="fa fa-sign-in blu"></i>
     <span>No Auth</span>
   </btn>
 
-  <btn id="btn_email" class="btn orange" onclick="changeButton('btn_email','#f39200','#2492bf')" ><i class="fa fa-home orang"></i><span>Email only</span></btn>
+  <btn id="btn_email" class="btn orange" onclick="changeButton('btn_email','#f39200','#2492bf')" >
+      <i class="fa fa-envelope orang"></i>
+      <span>Email only</span></btn>
   
-  <btn  id="btn_fullAuth" class="btn blue"  onclick="changeButton('btn_fullAuth','#2492bf','#f39200')"><i class="fa fa-home blu"  ></i><span>Email & Social</span></btn>
+  <btn  id="btn_fullAuth" class="btn blue"  onclick="changeButton('btn_fullAuth','#2492bf','#f39200')">
+      <i class="fa fa-facebook-official blu"  ></i>
+      <span>Email & Social</span></btn>
 
 </div> 
 
