@@ -5,6 +5,7 @@ import io
 import datetime
 
 import os
+import anvil
 import anvil.server
 
 import webbrowser
