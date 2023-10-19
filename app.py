@@ -675,5 +675,13 @@ def priceCalculations(userName, userEmail):
     return printList, total
 
 
+@anvil.server.callable
+def heroku_calls_anvil():
+  return anvil.server.call("hello_from_anvil")
+
+@anvil.server.callable  
+def hello_from_heroku():
+  return "Hello from Heroku!"
+
 
 
