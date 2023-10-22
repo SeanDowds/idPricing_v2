@@ -690,7 +690,7 @@ def hello_from_heroku(name):
 # The following is an email API request to Mailgun
 @anvil.server.callable
 def send_simple_message():
-    return requests.post(
+    response = requests.post(
         "https://api.mailgun.net/v3/sean@mondocivils.co.za/messages",
         auth=("api", "YOUR_API_KEY"),
         data={
@@ -700,6 +700,11 @@ def send_simple_message():
             "text": "Testing some Mailgun awesomeness!"
         }
     )
+    
+    # Process the response and return the necessary data
+    return {
+        "status_code": response.status_code,
+        "text": response.
     # Handle the error appropriately)
 
 
