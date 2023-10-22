@@ -690,16 +690,25 @@ def hello_from_heroku(name):
 # The following is an email API request to Mailgun
 @anvil.server.callable
 def send_simple_message():
-    response = requests.post(
-        "https://api.mailgun.net/v3/indetail.tech/messages",
-        auth=("api", "MAILGUN_API_KEY"),
-        data={
-            "from": "Excited User <sean@sandboxf6f7aa61bf0a469f816a0147735a68a5.mailgun.org>",
-            "to": ["sean@mondocivils.co.za"],
-            "subject": "Hello",
-            "text": "Testing some Mailgun awesomeness!"
-        }
-    )
+    recipient = 'sean@mondocivils.co.za'
+    subject = 'Test email from Python'
+    body = 'This is a test email sent from Python using Mailgun'
+    
+    url = 'https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN)
+    
+    auth = ('api', MAILGUN_API_KEY)
+    
+    data = {
+      'from': 'Excited User <mailgun@yourdomain.com>',
+      'to': [recipient], 
+      'subject': subject,
+      'text': body
+    }
+
+    response = requests.post(url, auth=auth, data=data)
+    
+    print('Status code:', response.status_code)
+    print('Response:', response.text)
     
     # Process the response and return the necessary data
     return {
