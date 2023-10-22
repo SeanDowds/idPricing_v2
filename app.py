@@ -19,7 +19,7 @@ from flask_wtf import FlaskForm
 
 
 # uplink_key = os.environ['UPLINK_KEY']
-anvil.server.connect('ANVIL_UPLINK')
+anvil.server.connect("server_JI4CJBFWWDR57RGATW5TJREU-KXOSLB3E74XGJLIP")
 
 # HEROKU - ADD THESE INSTEAD:
 DB_HOST = os.environ.get('DB_HOST')
