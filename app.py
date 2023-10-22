@@ -693,7 +693,7 @@ def send_complex_message():
     response = requests.post(
         try:
     response = requests.post(
-        "https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages",
+        "https://api.mailgun.net/v3/sean@mondocivils.co.za/messages",
         auth=("api", "YOUR_API_KEY"),
         data={"from": "Excited User sean@mondocivils.co.za",
               "to": "seandowdsmondo@gmail.com",
