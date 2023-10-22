@@ -704,7 +704,8 @@ def send_simple_message():
     # Process the response and return the necessary data
     return {
         "status_code": response.status_code,
-        "text": response.
+        "text": response.text
+    }
     # Handle the error appropriately)
 
 
