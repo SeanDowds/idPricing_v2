@@ -691,11 +691,11 @@ def hello_from_heroku(name):
 @anvil.server.callable
 def send_simple_message():
     response = requests.post(
-        "https://api.mailgun.net/v3/sean@mondocivils.co.za/messages",
-        auth=("api", "YOUR_API_KEY"),
+        "https://api.mailgun.net/v3/indetail.tech/messages",
+        auth=("api", "MAILGUN_API_KEY"),
         data={
             "from": "Excited User <sean@sandboxf6f7aa61bf0a469f816a0147735a68a5.mailgun.org>",
-            "to": ["seandowdsmondo@gmail.com"],
+            "to": ["sean@mondocivils.co.za"],
             "subject": "Hello",
             "text": "Testing some Mailgun awesomeness!"
         }
