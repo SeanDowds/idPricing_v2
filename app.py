@@ -689,20 +689,21 @@ def hello_from_heroku(name):
 
 # The following is an email API request to Mailgun
 @anvil.server.callable
-try:
-    response = requests.post(
-        "https://api.mailgun.net/v3/MAILGUN_DOMAIN/messages",
-        auth=("api", "YOUR_API_KEY"),
-        data={"from": "Excited User sean@mondocivils.co.za",
-              "to": "seandowdsmondo@gmail.com",
-              "cc": "sean@mondocivils.co.za",
-              "bcc": "sean@indetail.tech",
-              "subject": "Hello Seano",
-              "text": "Testing some Mailgun awesomeness!",
-              "html": "<html>HTML version of the body</html>"})
-    response.raise_for_status()  # Ensure the request was successful
-except requests.exceptions.RequestException as e:
-    print("An error occurred:", str(e))
+def send_complex_message():
+    try:
+        response = requests.post(
+            "https://api.mailgun.net/v3/MAILGUN_DOMAIN/messages",
+            auth=("api", "YOUR_API_KEY"),
+            data={"from": "Excited User sean@mondocivils.co.za",
+                  "to": "seandowdsmondo@gmail.com",
+                  "cc": "sean@mondocivils.co.za",
+                  "bcc": "sean@indetail.tech",
+                  "subject": "Hello Seano",
+                  "text": "Testing some Mailgun awesomeness!",
+                  "html": "<html>HTML version of the body</html>"})
+        response.raise_for_status()  # Ensure the request was successful
+    except requests.exceptions.RequestException as e:
+        print("An error occurred:", str(e))
     # Handle the error appropriately)
 
 
