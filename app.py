@@ -695,7 +695,7 @@ def send_complex_message():
         auth=("api", "YOUR_API_KEY"),
         files=[("attachment", ("test.jpg", open("files/test.jpg","rb").read())),
                ("attachment", ("test.txt", open("files/test.txt","rb").read()))],
-        data={"from": "Excited User <YOU@YOUR_DOMAIN_NAME>",
+        data={"from": "Excited User sean@mondocivils.co.za",
               "to": "seandowdsmondo@gmail.com",
               "cc": "sean@mondocivils.co.za",
               "bcc": "sean@indetail.tech",
