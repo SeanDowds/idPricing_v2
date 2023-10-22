@@ -689,9 +689,7 @@ def hello_from_heroku(name):
 
 # The following is an email API request to Mailgun
 @anvil.server.callable
-def send_complex_message():
-    response = requests.post(
-        try:
+try:
     response = requests.post(
         "https://api.mailgun.net/v3/MAILGUN_DOMAIN/messages",
         auth=("api", "YOUR_API_KEY"),
