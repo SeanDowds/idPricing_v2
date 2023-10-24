@@ -697,12 +697,12 @@ def send_simple_message():
     subject = 'Test email from Python'
     body = 'This is the latest email sent from Inside Edge using Mailgun'
     
-    url = 'https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN)
+    url = 'https://api.mailgun.net/v3/indetail.tech/messages'
     
     auth = ('api', MAILGUN_API_KEY)
     
     data = {
-      'from': 'Excited User <mailgun@yourdomain.com>',
+      'from': 'Excited User <sean@indetail.tech>',
       'to': [recipient], 
       'subject': subject,
       'text': body
