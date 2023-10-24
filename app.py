@@ -695,7 +695,7 @@ def hello_from_heroku(name):
 def send_simple_message():
     recipient = 'sean@mondocivils.co.za'
     subject = 'Test email from Python'
-    body = 'This is a test email sent from Python using Mailgun'
+    body = 'This is the latest email sent from Inside Edge using Mailgun'
     
     url = 'https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN)
     
