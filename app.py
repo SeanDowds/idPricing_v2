@@ -726,8 +726,10 @@ def send_simple_message(receiver):
 
 @anvil.server.callable
 def send_simple_message_api():
-
-   subject = 'Test email from Herok'
+    
+   sender = "Inside Edge Climbing <inside.edge@indetail.tech>" 
+   receiver = "seandowdsmondo@gmail.com"
+   subject = 'Test email from Heroku'
    body = 'This is a New simple email sent from Heroku using Mailgun API'
 
    url = 'https://api.eu.mailgun.net/v3/indetail.tech/messages'
