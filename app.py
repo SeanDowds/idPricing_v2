@@ -718,37 +718,10 @@ def send_simple_message(receiver):
    s.login(login, password)
    s.sendmail(msg['From'], msg['To'], msg.as_string())
    s.quit()
+    
    return 'Success - Check your email'
 
 
-    '''
-    recipient = 'sean@mondocivils.co.za'
-    subject = 'Test email from Python'
-    body = 'This is the latest email sent from Inside Edge using Mailgun'
-    
-    url = 'https://api.mailgun.net/v3/indetail.tech/messages'
-    
-    auth = ('api', MAILGUN_API_KEY)
-    
-    data = {
-      'from': 'Excited User <sean@indetail.tech>',
-      'to': [recipient], 
-      'subject': subject,
-      'text': body
-    }
-
-    response = requests.post(url, auth=auth, data=data)
-    
-    print('Status code:', response.status_code)
-    print('Response:', response.text)
-    
-    # Process the response and return the necessary data
-    return {
-        "status_code": response.status_code,
-        "text": response.text
-    }
-    # Handle the error appropriately)
-    '''
 
 
 
