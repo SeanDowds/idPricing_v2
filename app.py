@@ -745,8 +745,7 @@ def send_simple_message_api():
    }
 
    response = requests.post(url, auth=auth ,data=data)
-   response_data = json.loads(response.text)
-   return response_data['message'] 
+   return response
 
 
 
