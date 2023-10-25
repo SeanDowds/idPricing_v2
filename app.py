@@ -726,7 +726,6 @@ def send_simple_message(receiver):
 
 @anvil.server.callable
 def send_simple_message_api():
-   response_label.config(text='')
 
    subject = 'Test email from Herok'
    body = 'This is a New simple email sent from Heroku using Mailgun API'
