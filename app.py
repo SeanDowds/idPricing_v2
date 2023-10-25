@@ -3,9 +3,6 @@
 from flask import Flask, render_template, request, jsonify, make_response, send_file, session
 import io
 import datetime
-import requests
-import smtplib
-from email.mime.text import MIMEText
 
 import os
 import anvil
@@ -18,6 +15,11 @@ import psycopg2 as pg2
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
 from flask_wtf import FlaskForm
+
+# Mailing Imports
+import requests
+import smtplib
+from email.mime.text import MIMEText
 
 
 # uplink_key = os.environ['UPLINK_KEY']
@@ -720,6 +722,30 @@ def send_simple_message(receiver):
    s.quit()
     
    return 'Success - Check your email'
+
+
+@anvil.server.callable
+def send_simple_message_api():
+   response_label.config(text='')
+
+   subject = 'Test email from Herok'
+   body = 'This is a New simple email sent from Heroku using Mailgun API'
+
+   url = 'https://api.eu.mailgun.net/v3/indetail.tech/messages'
+
+   auth = ('api', MAILGUN_API_KEY)
+   
+   data = {
+   'from': sender,
+   'to': [receiver], # In list format for multiple emails
+   'subject': subject,
+   'text': body
+   }
+
+   response = requests.post(url, auth=auth ,data=data)
+   response_data = json.loads(response.text)
+   return response_data['message'] 
+
 
 
 
