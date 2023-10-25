@@ -30,6 +30,10 @@ DB_PASSWORD = os.environ.get('DB_PASSWORD')
 MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY')
 MAILGUN_DOMAIN = os.environ.get('MAILGUN_DOMAIN')
 
+MAILGUN_SMTP_LOGIN = os.environ.get('MAILGUN_SMTP_LOGIN')
+MAILGUN_SMTP_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
+MAILGUN_SMTP_PORT = os.environ.get('MAILGUN_SMTP_PORT')
+MAILGUN_SMTP_SERVER = os.environ.get('MAILGUN_SMTP_SERVER')
 
 #Heroku
 conn = pg2.connect(
@@ -692,7 +696,30 @@ def hello_from_heroku(name):
 
 # The following is an email API request to Mailgun
 @anvil.server.callable
-def send_simple_message():
+def send_simple_message(receiver):
+   smtp_server = MAILGUN_SMTP_SERVER
+   port = MAILGUN_SMTP_PORT
+   login = MAILGUN_SMTP_LOGIN
+   password = MAILGUN_SMTP_PASSWORD
+
+   subject = "Inside Edge Invoice"
+   sender = "Inside Edge Climbing <inside.edge@indetail.tech>" 
+   message = "Hi there - from Inside Edge sent via Tk_ai4.py"
+   
+   # Construct message and send
+   msg = MIMEText(message)
+   msg['Subject'] = subject
+   msg['From']    = sender
+   msg['To']      = receiver
+   s = smtplib.SMTP(smtp_server, port)
+
+   s.login(login, password)
+   s.sendmail(msg['From'], msg['To'], msg.as_string())
+   s.quit()
+   return 'Success - Check your email'
+
+
+    '''
     recipient = 'sean@mondocivils.co.za'
     subject = 'Test email from Python'
     body = 'This is the latest email sent from Inside Edge using Mailgun'
@@ -719,7 +746,7 @@ def send_simple_message():
         "text": response.text
     }
     # Handle the error appropriately)
-
+    '''
 
 
 
