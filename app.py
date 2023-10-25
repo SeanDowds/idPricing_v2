@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, jsonify, make_response, send_
 import io
 import datetime
 import requests
+import smtplib
+from email.mime.text import MIMEText
 
 import os
 import anvil
