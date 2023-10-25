@@ -745,7 +745,7 @@ def send_simple_message_api():
    }
 
    response = requests.post(url, auth=auth ,data=data)
-   return response
+   return response.status_code
 
 
 
