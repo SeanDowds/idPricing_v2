@@ -747,6 +747,22 @@ def send_simple_message_api():
    response = requests.post(url, auth=auth ,data=data)
    return response.status_code
 
+@anvil.server.callable
+def send_to_Mailgun_with_Attachment(sender,receiver, subject, body,invoice_pdf):
+   url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
+   auth = ('api', MAILGUN_API_KEY)
+   files = [("attachment",("Your-Invoice.pdf",
+            open(invoice_pdf,"rb").read()))]
+
+   data = {
+   'from': sender,
+   'to': [receiver], # In list format for multiple emails
+   'subject': subject,
+   'text': body
+   }
+
+   response = requests.post(url, auth=auth, files=files ,data=data)
+   return response.status_code
 
 
 
