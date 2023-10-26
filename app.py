@@ -699,7 +699,7 @@ def heroku_calls_anvil():
 def hello_from_heroku(name):
   return f"Hello  {name}, from Heroku!"
 
-# The following is an email API request to Mailgun
+# The following is an email SMTP request to Mailgun
 @anvil.server.callable
 def send_simple_message(receiver):
    smtp_server = MAILGUN_SMTP_SERVER
