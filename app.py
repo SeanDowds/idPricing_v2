@@ -764,8 +764,9 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body,invoice_pdf):
    response = requests.post(url, auth=auth, files=files ,data=data)
    return response.status_code
 
+# Delete if alternative works
 @anvil.server.callable
-def handler(data):
+def handler1(data):
   chunk = data['chunk']
   # write chunk to file
   chunks = [] # initialize empty list
@@ -776,6 +777,17 @@ def handler(data):
      chunks[-1].append(chunk) 
   
   return {"status": "ok", "chuncks": chunks}
+
+@anvil.server.callable
+def handler(data):
+
+  chunk = data['chunk']
+
+  global pdf_bytes
+  pdf_bytes += chunk.encode()
+
+  return {"status": "ok"}
+
 
 
 
