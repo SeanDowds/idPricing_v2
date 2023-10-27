@@ -50,7 +50,8 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-pdf_bytes = b"" 
+pdf_bytes = b""
+pdf_count = 0
 
 def initialSelection():
     c = conn.cursor()
@@ -756,7 +757,7 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
    #files = [("attachment",("Your-Invoice.pdf",
             #open(invoice_pdf,"rb").read()))]
    files = [
-    ("attachment.pdf", invoice_pdf.read()) 
+    ("attachment", invoice_pdf.read()) 
   ]
 
    data = {
@@ -784,8 +785,9 @@ def handler1(data):
   return {"status": "ok", "chuncks": chunks}
 
 @anvil.server.callable
-def handler(inv_data, pdf_data):
+def handler(inv_data, pdf_data, pdf_parts):
   global pdf_bytes
+  global pdf_count
 
   sender = "inside.edge@indetail.tech"
   receiver = inv_data["receivingEmail"]
@@ -794,9 +796,13 @@ def handler(inv_data, pdf_data):
 
   chunk = pdf_data["chunk"]
   pdf_bytes += chunk.encode()
+  pdf_count += 1
     
-  # Send to Mailgun
-  response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_bytes)
+  if pdf_count == pdf_parts-1:
+      # Send to Mailgun
+      response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_bytes)
+  else:
+      response = 0
 
   return {"status": response}
 
