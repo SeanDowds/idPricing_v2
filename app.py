@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request, jsonify, make_response, send_file, session
 import io
 import datetime
+from base64 import b64decode
 
 import os
 import anvil
@@ -751,14 +752,18 @@ def send_simple_message_api():
 def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
     
    #invoice_pdf = io.BytesIO(pdf_bytes)
+
+    
+   pdf_bytes = b64decode(b64, validate=True)
+
    f = open('inv_file.pdf', 'wb')
-   f.write(pdf_bytes)
-   f.close() 
+   f.write(bytes)
+   f.close()
     
    url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
    auth = ('api', MAILGUN_API_KEY)
    files = [("attachment",("Your-Invoice.pdf",
-            open(inv_file,"rb").read()))]
+            open('inv_file.pdf',"rb").read()))]
    #files = [
     #("attachment", inv_file.read()) ]
   
@@ -786,12 +791,12 @@ def handler(inv_data, pdf_data):
   pdf_parts = pdf_data['total_parts']
 
   chunk = pdf_data["chunk"]
-  pdf_bytes += chunk.encode()
+  pdf_str += chunk
   pdf_count += 1
     
   if pdf_count == pdf_parts:
       # Send to Mailgun
-      response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_bytes)
+      response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
       pdf_count = 0
   else:
       response = 1000
