@@ -802,11 +802,13 @@ def handler(inv_data, pdf_data):
   if pdf_count == pdf_parts:
       # Send to Mailgun
       response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_bytes)
+      pdf_count = 0
   else:
-      response = 0
+      response = 1000
 
   print("pdf_count, pdf_parts  ",pdf_count, pdf_parts)
-
+    
+  
   return {"status": response, "pdf_count":pdf_count, "pdf_parts":pdf_parts}
 
 
