@@ -792,7 +792,7 @@ def handler(inv_data, pdf_data):
 
   chunk = pdf_data["chunk"]
   pdf_str += chunk
-  pdf_count += 1
+  
     
   if pdf_count == pdf_parts:
       # Send to Mailgun
@@ -801,8 +801,7 @@ def handler(inv_data, pdf_data):
   else:
       response = 1000
 
-  print("pdf_count, pdf_parts  ",pdf_count, pdf_parts)
-    
+  pdf_count += 1  
   
   return {"status": response, "pdf_count":pdf_count, "pdf_parts":pdf_parts}
 
