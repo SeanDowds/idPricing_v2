@@ -790,7 +790,7 @@ def handler(inv_data, pdf_data):
   pdf_bytes += chunk.encode()
     
   # Send to Mailgun
-  response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, invoice_pdf)
+  response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_bytes)
 
   return {"status": response}
 
