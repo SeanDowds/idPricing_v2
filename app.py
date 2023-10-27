@@ -764,7 +764,10 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body,invoice_pdf):
    response = requests.post(url, auth=auth, files=files ,data=data)
    return response.status_code
 
-
+@anvil.server.callable
+def chunk_collections_test(chunk, chunks):
+    chunks += chunk
+    return len(chunks)
 
 
 
