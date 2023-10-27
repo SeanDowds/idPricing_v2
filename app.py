@@ -785,7 +785,7 @@ def handler1(data):
   return {"status": "ok", "chuncks": chunks}
 
 @anvil.server.callable
-def handler(inv_data, pdf_data):
+def handler(inv_data):
   global pdf_bytes
   global pdf_count
 
