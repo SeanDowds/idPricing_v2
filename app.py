@@ -766,21 +766,16 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body,invoice_pdf):
 
 @anvil.server.callable
 def handler(data):
+  chunk = data['chunk']
+  # write chunk to file
+  chunks = [] # initialize empty list
 
-  chunks = json.loads(data['chunks'])
-
-  chunk = chunks[data['part']-1]
-
-  # Open temporary file 
-  pdf_file = tempfile.NamedTemporaryFile(delete=False)  
-
-  # Write chunk to file
-  pdf_file.write(chunk.encode())
-
-  # Flush to ensure data is written
-  pdf_file.flush()  
-
-  return {"status": "ok"}
+  if not chunks:
+     chunks.append(chunk)
+  else:
+     chunks[-1].append(chunk) 
+  
+  return {"status": "ok", "chuncks": chunks}
 
 
 
