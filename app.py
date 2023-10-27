@@ -750,14 +750,17 @@ def send_simple_message_api():
 
 def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
     
-   invoice_pdf = io.BytesIO(pdf_bytes)
+   #invoice_pdf = io.BytesIO(pdf_bytes)
+   f = open('inv_file.pdf', 'wb')
+   f.write(pdf_bytes)
+   f.close() 
     
    url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
    auth = ('api', MAILGUN_API_KEY)
-   #files = [("attachment",("Your-Invoice.pdf",
-            #open(invoice_pdf,"rb").read()))]
-   files = [
-    ("attachment", invoice_pdf.read()) 
+   files = [("attachment",("Your-Invoice.pdf",
+            open(inv_file,"rb").read()))]
+   #files = [
+    #("attachment", inv_file.read()) 
   ]
 
    data = {
@@ -769,20 +772,7 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
 
    response = requests.post(url, auth=auth, files=files ,data=data)
    return response.status_code
-
-# Delete if alternative works
-@anvil.server.callable
-def handler1(data):
-  chunk = data['chunk']
-  # write chunk to file
-  chunks = [] # initialize empty list
-
-  if not chunks:
-     chunks.append(chunk)
-  else:
-     chunks[-1].append(chunk) 
-  
-  return {"status": "ok", "chuncks": chunks}
+    
 
 @anvil.server.callable
 def handler(inv_data, pdf_data):
