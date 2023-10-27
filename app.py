@@ -747,7 +747,10 @@ def send_simple_message_api():
    response = requests.post(url, auth=auth ,data=data)
    return response.status_code
 
-def send_to_Mailgun_with_Attachment(sender,receiver, subject, body,invoice_pdf):
+def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
+    
+   invoice_pdf = io.BytesIO(pdf_bytes)
+    
    url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
    auth = ('api', MAILGUN_API_KEY)
    files = [("attachment",("Your-Invoice.pdf",
