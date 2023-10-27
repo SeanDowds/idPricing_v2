@@ -22,7 +22,6 @@ import smtplib
 from email.mime.text import MIMEText
 import json
 
-
 # uplink_key = os.environ['UPLINK_KEY']
 anvil.server.connect("server_JI4CJBFWWDR57RGATW5TJREU-KXOSLB3E74XGJLIP")
 
@@ -51,6 +50,7 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
+pdf_bytes = b"" 
 
 def initialSelection():
     c = conn.cursor()
@@ -780,10 +780,9 @@ def handler1(data):
 
 @anvil.server.callable
 def handler(data):
-
-  chunk = data['chunk']
-
   global pdf_bytes
+
+  chunk = data["chunk"]
   pdf_bytes += chunk.encode()
 
   return {"status": "ok"}
