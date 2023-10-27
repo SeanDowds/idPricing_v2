@@ -785,7 +785,7 @@ def handler1(data):
   return {"status": "ok", "chuncks": chunks}
 
 @anvil.server.callable
-def handler(inv_data, pdf_data, pdf_parts):
+def handler(inv_data, pdf_data):
   global pdf_bytes
   global pdf_count
 
@@ -793,12 +793,13 @@ def handler(inv_data, pdf_data, pdf_parts):
   receiver = inv_data["receivingEmail"]
   subject = inv_data["subject"]
   body = inv_data["body"]
+  parts = pdf_data['total_parts']
 
   chunk = pdf_data["chunk"]
   pdf_bytes += chunk.encode()
   pdf_count += 1
     
-  if pdf_count == pdf_parts-1:
+  if pdf_count == pdf_parts:
       # Send to Mailgun
       response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_bytes)
   else:
