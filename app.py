@@ -51,7 +51,7 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-pdf_bytes = b""
+pdf_str = b""
 pdf_count = 0
 
 def initialSelection():
@@ -781,7 +781,7 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
 
 @anvil.server.callable
 def handler(inv_data, pdf_data):
-  global pdf_bytes
+  global pdf_str
   global pdf_count
 
   sender = "inside.edge@indetail.tech"
