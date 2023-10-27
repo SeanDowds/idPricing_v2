@@ -805,7 +805,7 @@ def handler(inv_data, pdf_data):
   else:
       response = 0
 
-  return {"status": response}
+  return {"status": response, "pdf_count":pdf_count, "pdf_parts":pdf_parts}
 
 
 
