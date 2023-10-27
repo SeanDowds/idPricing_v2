@@ -747,7 +747,6 @@ def send_simple_message_api():
    response = requests.post(url, auth=auth ,data=data)
    return response.status_code
 
-@anvil.server.callable
 def send_to_Mailgun_with_Attachment(sender,receiver, subject, body,invoice_pdf):
    url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
    auth = ('api', MAILGUN_API_KEY)
@@ -779,13 +778,21 @@ def handler1(data):
   return {"status": "ok", "chuncks": chunks}
 
 @anvil.server.callable
-def handler(data):
+def handler(inv_data, pdf_data):
   global pdf_bytes
 
-  chunk = data["chunk"]
-  pdf_bytes += chunk.encode()
+  sender = "inside.edge@indetail.tech"
+  receiver = inv_data["receivingEmail"]
+  subject = inv_data["subject"]
+  body = inv_data["text"]
 
-  return {"status": "ok"}
+  chunk = pdf_data["chunk"]
+  pdf_bytes += chunk.encode()
+    
+  # Send to Mailgun
+  response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, invoice_pdf)
+
+  return {"status": response}
 
 
 
