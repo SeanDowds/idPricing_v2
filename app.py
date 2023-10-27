@@ -51,7 +51,7 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-pdf_str = b""
+pdf_str = ""
 pdf_count = 0
 
 def initialSelection():
