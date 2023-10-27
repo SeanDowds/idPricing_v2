@@ -784,7 +784,7 @@ def handler(inv_data, pdf_data):
   sender = "inside.edge@indetail.tech"
   receiver = inv_data["receivingEmail"]
   subject = inv_data["subject"]
-  body = inv_data["text"]
+  body = inv_data["body"]
 
   chunk = pdf_data["chunk"]
   pdf_bytes += chunk.encode()
