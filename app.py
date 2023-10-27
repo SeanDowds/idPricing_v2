@@ -760,8 +760,8 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
    files = [("attachment",("Your-Invoice.pdf",
             open(inv_file,"rb").read()))]
    #files = [
-    #("attachment", inv_file.read()) 
-  ]
+    #("attachment", inv_file.read()) ]
+  
 
    data = {
    'from': sender,
