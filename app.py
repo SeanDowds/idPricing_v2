@@ -790,6 +790,7 @@ def handler(inv_data, pdf_data):
 
   chunk = pdf_data["chunk"]
   pdf_str += chunk
+  str_start = pdf_str[:3] + ' ' + chunk[:3]
 
   if pdf_data["end"]:
       # Send to Mailgun
@@ -797,7 +798,7 @@ def handler(inv_data, pdf_data):
   else:
       response = 1000
 
-  return {"status": response,"end":pdf_data["end"], "pdf_parts":pdf_parts, "str_size":len(pdf_str)}
+  return {"status": response,"end":pdf_data["end"], "pdf_parts":pdf_parts, "str_size":len(pdf_str), "str_start":str_start}
 
 
 
