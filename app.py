@@ -773,17 +773,16 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
     
 
 @anvil.server.callable
-def handler(inv_data, pdf_data):
-    chunk = pdf_data["chunk"]
+def handler(inv_data, end, chunk):
 
     # Retrieve the current state of the PDF string from the cache
     pdf_str = pdf_cache.get("pdf_str", "")
     
     # Append the current chunk to the PDF string
-    pdf_str += chunk
+    pdf_str = pdf_str+chunk
     x=len(pdf_str)
 
-    if pdf_data["end"]:
+    if end:
         # Use information for sending email
         sender = "inside.edge@indetail.tech"
         receiver = inv_data["receivingEmail"]
@@ -794,16 +793,16 @@ def handler(inv_data, pdf_data):
         response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
 
         # Clear the cached PDF string after sending
-        pdf_cache.pop("pdf_str", None)
+        pdf_str = ''
     else:
         response = 1000
 
-        # Store the updated PDF string in the cache
-        pdf_cache["pdf_str"] = pdf_str
+    # Store the updated PDF string in the cache
+    pdf_cache["pdf_str"] = pdf_str
 
     return {
         "status": response,
-        "end": pdf_data["end"],
+        "end": end,
         "str_size": x,
     }
 
