@@ -818,8 +818,9 @@ def handlerTest(inv_data, end, chunk):
 
     # Store the updated PDF string in the cache
     pdf_cache["pdf_str"] = joined_str
+    y=len(pdf_cache["pdf_str"])
 
-    return f"str_size = {x}"
+    return f"str_size = {x} , cache size = {y}"
 
 
 
