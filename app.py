@@ -785,11 +785,12 @@ def handler(inv_data, pdf_data):
 
     # Retrieve the current state of the PDF string from the cache
     pdf_str = pdf_cache.get("pdf_str", "")
+    x=len(pdf_str)
 
     # Append the current chunk to the PDF string
     pdf_str += chunk
 
-    str_start = pdf_str[:3] + ' ' + chunk[:3]
+    #str_start = pdf_str[:3] + ' ' + chunk[:3]
 
     if pdf_data["end"]:
         # Use information for sending email
@@ -797,7 +798,7 @@ def handler(inv_data, pdf_data):
         receiver = inv_data["receivingEmail"]
         subject = inv_data["subject"]
         body = inv_data["body"]
-        pdf_parts = pdf_data['total_parts']
+
         # Send to Mailgun
         response = "send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)"
 
@@ -812,8 +813,7 @@ def handler(inv_data, pdf_data):
     return {
         "status": response,
         "end": pdf_data["end"],
-        "str_size": len(pdf_str),
-        "str_start": str_start
+        "str_size": x,
     }
 
 
