@@ -22,6 +22,7 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 import json
+from cachetools import LRUCache
 
 # uplink_key = os.environ['UPLINK_KEY']
 anvil.server.connect("server_JI4CJBFWWDR57RGATW5TJREU-KXOSLB3E74XGJLIP")
@@ -51,7 +52,7 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-pdf_str = ""
+pdf_cache = LRUCache(maxsize=1)
 
 def initialSelection():
     c = conn.cursor()
@@ -778,27 +779,42 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
    return response.status_code
     
 
-@anvil.server.callable
+@anvil.server.callabledef handler(inv_data, pdf_data):
 def handler(inv_data, pdf_data):
-  global pdf_str
+    chunk = pdf_data["chunk"]
 
-  sender = "inside.edge@indetail.tech"
-  receiver = inv_data["receivingEmail"]
-  subject = inv_data["subject"]
-  body = inv_data["body"]
-  pdf_parts = pdf_data['total_parts']
+    # Retrieve the current state of the PDF string from the cache
+    pdf_str = pdf_cache.get("pdf_str", "")
 
-  chunk = pdf_data["chunk"]
-  pdf_str += chunk
-  str_start = pdf_str[:3] + ' ' + chunk[:3]
+    # Append the current chunk to the PDF string
+    pdf_str += chunk
 
-  if pdf_data["end"]:
-      # Send to Mailgun
-      response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
-  else:
-      response = 1000
+    str_start = pdf_str[:3] + ' ' + chunk[:3]
 
-  return {"status": response,"end":pdf_data["end"], "pdf_parts":pdf_parts, "str_size":len(pdf_str), "str_start":str_start}
+    if pdf_data["end"]:
+        # Use information for sending email
+        sender = "inside.edge@indetail.tech"
+        receiver = inv_data["receivingEmail"]
+        subject = inv_data["subject"]
+        body = inv_data["body"]
+        pdf_parts = pdf_data['total_parts']
+        # Send to Mailgun
+        response = "send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)"
+
+        # Clear the cached PDF string after sending
+        pdf_cache.pop("pdf_str", None)
+    else:
+        response = 1000
+
+        # Store the updated PDF string in the cache
+        pdf_cache["pdf_str"] = pdf_str
+
+    return {
+        "status": response,
+        "end": pdf_data["end"],
+        "str_size": len(pdf_str),
+        "str_start": str_start
+    }
 
 
 
