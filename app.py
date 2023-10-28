@@ -749,25 +749,18 @@ def send_simple_message_api():
    response = requests.post(url, auth=auth ,data=data)
    return response.status_code
 
-def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
-    
-   #invoice_pdf = io.BytesIO(pdf_bytes)
+def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
+   # Convert the string to bytes
+   pdf_bytes = base64.b64decode(pdf_str)
 
-    
-   pdf_bytes = b64decode(b64, validate=True)
-
-   f = open('inv_file.pdf', 'wb')
-   f.write(bytes)
-   f.close()
+   # Convert the bytes to a pdf file
+   pdf_file = io.BytesIO(pdf_bytes)
     
    url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
    auth = ('api', MAILGUN_API_KEY)
    files = [("attachment",("Your-Invoice.pdf",
-            open('inv_file.pdf',"rb").read()))]
-   #files = [
-    #("attachment", inv_file.read()) ]
+            open('pdf_file.pdf',"rb").read()))]
   
-
    data = {
    'from': sender,
    'to': [receiver], # In list format for multiple emails
@@ -785,12 +778,10 @@ def handler(inv_data, pdf_data):
 
     # Retrieve the current state of the PDF string from the cache
     pdf_str = pdf_cache.get("pdf_str", "")
-    x=len(pdf_str)
-
+    
     # Append the current chunk to the PDF string
     pdf_str += chunk
-
-    #str_start = pdf_str[:3] + ' ' + chunk[:3]
+    x=len(pdf_str)
 
     if pdf_data["end"]:
         # Use information for sending email
@@ -800,7 +791,7 @@ def handler(inv_data, pdf_data):
         body = inv_data["body"]
 
         # Send to Mailgun
-        response = "send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)"
+        response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
 
         # Clear the cached PDF string after sending
         pdf_cache.pop("pdf_str", None)
