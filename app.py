@@ -52,7 +52,6 @@ conn = pg2.connect(
     )
 
 pdf_str = ""
-pdf_count = 0
 
 def initialSelection():
     c = conn.cursor()
@@ -782,7 +781,6 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
 @anvil.server.callable
 def handler(inv_data, pdf_data):
   global pdf_str
-  global pdf_count
 
   sender = "inside.edge@indetail.tech"
   receiver = inv_data["receivingEmail"]
@@ -792,18 +790,14 @@ def handler(inv_data, pdf_data):
 
   chunk = pdf_data["chunk"]
   pdf_str += chunk
-  
-    
-  if pdf_count == pdf_parts:
+
+  if pdf_data["end"]:
       # Send to Mailgun
       response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
-      pdf_count = 0
   else:
       response = 1000
 
-  pdf_count += 1  
-  
-  return {"status": response, "pdf_count":pdf_count, "pdf_parts":pdf_parts}
+  return {"status": response,"end":pdf_data["end"], "pdf_parts":pdf_parts}
 
 
 
