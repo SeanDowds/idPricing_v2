@@ -759,7 +759,7 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
    url = f'https://api.eu.mailgun.net/v3/indetail.tech/messages'
    auth = ('api', MAILGUN_API_KEY)
    files = [("attachment",("Your-Invoice.pdf",
-            open('pdf_file.pdf',"rb").read()))]
+            pdf_file))]
   
    data = {
    'from': sender,
