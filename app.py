@@ -813,11 +813,11 @@ def handlerTest(inv_data, end, chunk):
     pdf_str = pdf_cache.get("pdf_str", "")
     
     # Append the current chunk to the PDF string
-    pdf_str = pdf_str+chunk
-    x=len(pdf_str)
+    joined_str = format(pdf_str,chunk)
+    x=len(joined_str)
 
     # Store the updated PDF string in the cache
-    pdf_cache["pdf_str"] = pdf_str
+    pdf_cache["pdf_str"] = joined_str
 
     return f"str_size = {x}"
 
