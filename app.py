@@ -806,6 +806,20 @@ def handler(inv_data, end, chunk):
         "str_size": x,
     }
 
+@anvil.server.callable
+def handlerTest(inv_data, end, chunk):
+
+    # Retrieve the current state of the PDF string from the cache
+    pdf_str = pdf_cache.get("pdf_str", "")
+    
+    # Append the current chunk to the PDF string
+    pdf_str = pdf_str+chunk
+    x=len(pdf_str)
+
+    # Store the updated PDF string in the cache
+    pdf_cache["pdf_str"] = pdf_str
+
+    return f"str_size = {x}"
 
 
 
