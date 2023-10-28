@@ -751,7 +751,7 @@ def send_simple_message_api():
 
 def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
    # Convert the string to bytes
-   pdf_bytes = base64.b64decode(pdf_str)
+   pdf_bytes = b64decode(pdf_str)
 
    # Convert the bytes to a pdf file
    pdf_file = io.BytesIO(pdf_bytes)
