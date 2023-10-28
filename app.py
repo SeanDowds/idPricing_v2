@@ -779,7 +779,7 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_bytes):
    return response.status_code
     
 
-@anvil.server.callabledef handler(inv_data, pdf_data):
+@anvil.server.callable
 def handler(inv_data, pdf_data):
     chunk = pdf_data["chunk"]
 
