@@ -691,7 +691,9 @@ def priceCalculations(userName, userEmail):
 
     return printList, total
 
+########
 # The following pair with IE-Invoicing-App with Anvil
+########
 
 @anvil.server.callable
 def heroku_calls_anvil():
@@ -807,7 +809,7 @@ def handler(inv_data, end, chunk):
     }
     
 @anvil.server.callable
-def handlerTest(inv_data, end, chunk_id, chunk):
+def handlerTest2(inv_data, end, chunk_id, chunk):
   
   # Store chunk independently in cache
   pdf_cache[chunk_id] = chunk  
@@ -831,5 +833,49 @@ def handlerTest(inv_data, end, chunk_id, chunk):
   else:
 
     return f"Chunk {chunk_id} cached."
-      
 
+
+def addChunk(client, chunk, chunk_no):
+    # This is the data from the DB as above
+    c = conn.cursor()
+    sql = "INSERT INTO pdf_str_chunks (client, chunk, chunk_no) VALUES (%s, %s, %s)"
+    c.execute(sql, (client, chunk, chunk_no)) 
+    return c.fetchone()[0]
+
+
+def getFullString():
+    sql = "SELECT chunk FROM pdf_str_chunks ORDER BY chunk_id" 
+    c = conn.cursor()
+    c.execute(sql)
+    
+    chunks = []
+    for row in c:
+      chunks.append(row[0])
+
+    fullString = "".join(chunks)
+    return fullString
+
+def clearAllChunks():
+    sql = "TRUNCATE pdf_str_chunks" 
+    c = conn.cursor()
+    c.execute(sql)
+
+
+@anvil.server.callable
+def handlerTest(inv_data, end, chunk_id, chunk):
+  
+  # Store chunk independently in cache
+  db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
+
+  if end:
+    pdf_str=getFullString()
+    x=len(pdf_str)
+    z = "clear cache"
+
+    clearAllChunks()
+
+    return x,z
+
+  else:
+
+    return f"Chunk {chunk_id} saved as {db_id}."
