@@ -840,13 +840,17 @@ def addChunk(client, chunk, chunk_no):
     c = conn.cursor()
     sql = "INSERT INTO pdf_str_chunks (client, chunk, chunk_no) VALUES (%s, %s, %s)"
     c.execute(sql, (client, chunk, chunk_no)) 
+    conn.commit()  
+    
     return c.fetchone()[0]
+    
 
 
 def getFullString():
     sql = "SELECT chunk FROM pdf_str_chunks ORDER BY chunk_id" 
     c = conn.cursor()
     c.execute(sql)
+    conn.commit()
     
     chunks = []
     for row in c:
@@ -859,6 +863,7 @@ def clearAllChunks():
     sql = "TRUNCATE pdf_str_chunks" 
     c = conn.cursor()
     c.execute(sql)
+    conn.commit()
 
 
 @anvil.server.callable
