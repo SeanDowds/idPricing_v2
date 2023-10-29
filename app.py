@@ -847,7 +847,7 @@ def addChunk(client, chunk, chunk_no):
 
 
 def getFullString():
-    sql = "SELECT chunk FROM pdf_str_chunks ORDER BY chunk_id" 
+    sql = "SELECT chunk FROM pdf_str_chunks ORDER BY chunk_no" 
     c = conn.cursor()
     c.execute(sql)
     conn.commit()
