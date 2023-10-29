@@ -748,7 +748,7 @@ def send_simple_message_api():
    response = requests.post(url, auth=auth ,data=data)
    return response.status_code
 
-def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
+def send_to_Mailgun_with_Attachment(sender,inv_data, pdf_str):
    # Convert the string to bytes
    pdf_bytes = b64decode(pdf_str)
 
@@ -759,10 +759,15 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
    auth = ('api', MAILGUN_API_KEY)
    files = [("attachment",("Your-Invoice.pdf",
             pdf_file))]
+
+   receiver = inv_data["receivingEmail"]
+   copy_email = inv_data["copyEmail"]
+   subject = inv_data["subject"]
+   body = inv_data["body"]
   
    data = {
    'from': sender,
-   'to': [receiver, "sean@indetail.tech"], # In list format for multiple emails
+   'to': [receiver, copy_email], # In list format for multiple emails
    'subject': subject,
    'text': body
    }
@@ -815,12 +820,9 @@ def handler(inv_data, end, chunk_id, chunk):
 
         # Use information for sending email
         sender = "inside.edge@indetail.tech"
-        receiver = inv_data["receivingEmail"]
-        subject = inv_data["subject"]
-        body = inv_data["body"]
 
         # Send to Mailgun
-        response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
+        response = send_to_Mailgun_with_Attachment(sender, inv_data, pdf_str)
     
         clearAllChunks()
           
