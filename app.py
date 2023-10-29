@@ -782,10 +782,8 @@ def addChunk(client, chunk, chunk_no):
     sql = "INSERT INTO pdf_str_chunks (client, chunk, chunk_no) VALUES (%s, %s, %s)"
     c.execute(sql, (client, chunk, chunk_no)) 
     conn.commit()  
-    
     return
     
-
 
 def getFullString():
     sql = "SELECT chunk FROM pdf_str_chunks ORDER BY chunk_no" 
@@ -799,6 +797,7 @@ def getFullString():
 
     fullString = "".join(chunks)
     return fullString
+
 
 def clearAllChunks():
     sql = "TRUNCATE pdf_str_chunks" 
@@ -816,7 +815,6 @@ def handler(inv_data, end, chunk_id, chunk):
       if end:
         pdf_str=getFullString()
         x=len(pdf_str)
-        z = "clear cache"
 
         # Use information for sending email
         sender = "inside.edge@indetail.tech"
@@ -825,8 +823,9 @@ def handler(inv_data, end, chunk_id, chunk):
         response = send_to_Mailgun_with_Attachment(sender, inv_data, pdf_str)
     
         clearAllChunks()
-          
-        return response
+
+        # Add a 200 response to clean up
+        return 200
       else:
         return
   except:
