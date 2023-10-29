@@ -849,10 +849,17 @@ def handlerTest(inv_data, end, chunk_id, chunk):
         x=len(pdf_str)
         z = "clear cache"
 
+        # Use information for sending email
+        sender = "inside.edge@indetail.tech"
+        receiver = inv_data["receivingEmail"]
+        subject = inv_data["subject"]
+        body = inv_data["body"]
+
         # Send to Mailgun
         response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
     
         clearAllChunks()
+          
         return x,z, response
       else:
         return f"Chunk {chunk_id} saved as {db_id}."
