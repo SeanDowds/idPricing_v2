@@ -842,7 +842,7 @@ def addChunk(client, chunk, chunk_no):
     c.execute(sql, (client, chunk, chunk_no)) 
     conn.commit()  
     
-    return c.fetchone()[0]
+    return
     
 
 
