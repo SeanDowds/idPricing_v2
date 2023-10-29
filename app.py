@@ -818,11 +818,13 @@ def handlerTest(inv_data, end, chunk_id, chunk):
     
     for id in sorted(pdf_cache.keys()):
       pdf_str += pdf_cache[id]
+      x=pdf_cache[id]
+      y=pdf_cache[id].get()
 
     z = "clear cache"
     pdf_cache.clear()
 
-    return len(pdf_str), z, len(pdf_str), list(pdf_cache.keys())
+    return len(pdf_str), z, len(pdf_str), x,y)
 
   else:
 
