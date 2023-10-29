@@ -808,12 +808,12 @@ def handler(inv_data, end, chunk):
     
 @anvil.server.callable
 def handlerTest(inv_data, end, chunk_id, chunk):
-  pdf_str = ""
+  
   # Store chunk independently in cache
   pdf_cache[chunk_id] = chunk  
 
   if end:
-
+    pdf_str = ""
     # Reconstruct PDF by iterating over cached chunks
     
     for id in sorted(pdf_cache.keys()):
