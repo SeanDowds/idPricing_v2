@@ -22,7 +22,6 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 import json
-from cachetools import LRUCache
 
 # uplink_key = os.environ['UPLINK_KEY']
 anvil.server.connect("server_JI4CJBFWWDR57RGATW5TJREU-KXOSLB3E74XGJLIP")
@@ -51,8 +50,6 @@ conn = pg2.connect(
     sslmode='prefer',
     connect_timeout=10
     )
-
-pdf_cache = LRUCache(maxsize=20)
 
 def initialSelection():
     c = conn.cursor()
@@ -808,31 +805,6 @@ def handler(inv_data, end, chunk):
         "str_size": x,
     }
     
-@anvil.server.callable
-def handlerTest2(inv_data, end, chunk_id, chunk):
-  
-  # Store chunk independently in cache
-  pdf_cache[chunk_id] = chunk  
-
-  if end:
-    pdf_str = ""
-    # Reconstruct PDF by iterating over cached chunks
-    
-    for id in sorted(pdf_cache.keys()):
-      pdf_str += pdf_cache[id]
-      x=pdf_cache[id]
-
-    x=len(pdf_str)
-    y=len(pdf_cache.keys())
-
-    z = "clear cache"
-    pdf_cache.clear()
-
-    return x, y, z
-
-  else:
-
-    return f"Chunk {chunk_id} cached."
 
 
 def addChunk(client, chunk, chunk_no):
@@ -876,9 +848,12 @@ def handlerTest(inv_data, end, chunk_id, chunk):
         pdf_str=getFullString()
         x=len(pdf_str)
         z = "clear cache"
+
+        # Send to Mailgun
+        response = send_to_Mailgun_with_Attachment(sender, receiver, subject, body, pdf_str)
     
         clearAllChunks()
-        return x,z
+        return x,z, response
       else:
         return f"Chunk {chunk_id} saved as {db_id}."
   except:
