@@ -806,9 +806,7 @@ def handler(inv_data, end, chunk):
         "str_size": x,
     }
 @anvil.server.callable
-def handlerTest(inv_data, end, chunk):
-
-  chunk_id = inv_data["chunk_id"]
+def handlerTest(inv_data, end, chunk_id, chunk):
 
   # Store chunk independently in cache
   pdf_cache[chunk_id] = chunk  
