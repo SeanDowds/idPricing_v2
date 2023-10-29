@@ -52,7 +52,7 @@ conn = pg2.connect(
     connect_timeout=10
     )
 
-pdf_cache = LRUCache(maxsize=1)
+pdf_cache = LRUCache(maxsize=20)
 
 def initialSelection():
     c = conn.cursor()
@@ -819,12 +819,11 @@ def handlerTest(inv_data, end, chunk_id, chunk):
     for id in sorted(pdf_cache.keys()):
       pdf_str += pdf_cache[id]
       x=pdf_cache[id]
-      y=pdf_cache[id].get()
 
     z = "clear cache"
     pdf_cache.clear()
 
-    return len(pdf_str), z, len(pdf_str), x,y
+    return len(pdf_str), z, len(pdf_str), x
 
   else:
 
