@@ -825,6 +825,6 @@ def handlerTest(inv_data, end, chunk_id, chunk):
 
   else:
 
-    return f"Chunk {chunk_id} cached. total len=", pdf_str)
+    return f"Chunk {chunk_id} cached. total len={pdf_str}"
       
 
