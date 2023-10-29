@@ -762,7 +762,7 @@ def send_to_Mailgun_with_Attachment(sender,receiver, subject, body, pdf_str):
   
    data = {
    'from': sender,
-   'to': [receiver], # In list format for multiple emails
+   'to': [receiver, "sean@indetail.tech"], # In list format for multiple emails
    'subject': subject,
    'text': body
    }
