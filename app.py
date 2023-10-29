@@ -820,6 +820,9 @@ def handlerTest(inv_data, end, chunk):
     pdf_cache["pdf_str"] = joined_str
     y=len(pdf_cache["pdf_str"])
 
+    if end:
+        pdf_cache.clear()
+
     return f"str_size = {x} , cache size = {y}"
 
 
