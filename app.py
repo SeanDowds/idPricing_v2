@@ -821,10 +821,10 @@ def handlerTest(inv_data, end, chunk_id, chunk):
     z = "clear cache"
     pdf_cache.clear()
 
-    return len(pdf_str), z
+    return len(pdf_str), z, len(pdf_str)
 
   else:
 
-    return f"Chunk {chunk_id} cached. total len={pdf_str}"
+    return f"Chunk {chunk_id} cached."
       
 
