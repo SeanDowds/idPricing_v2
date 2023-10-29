@@ -824,9 +824,9 @@ def handler(inv_data, end, chunk_id, chunk):
     
         clearAllChunks()
           
-        return x,z, response
+        return response
       else:
-        return f"Chunk {chunk_id} saved as {db_id}."
+        return
   except:
       clearAllChunks()
 
