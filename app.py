@@ -805,7 +805,30 @@ def handler(inv_data, end, chunk):
         "end": end,
         "str_size": x,
     }
+@anvil.server.callable
+def handlerTest(inv_data, end, chunk):
 
+  chunk_id = inv_data["chunk_id"]
+
+  # Store chunk independently in cache
+  pdf_cache[chunk_id] = chunk  
+
+  if end:
+
+    # Reconstruct PDF by iterating over cached chunks
+    pdf_str = ""
+    for id in sorted(pdf_cache.keys()):
+      pdf_str += pdf_cache[id]
+
+    z = "clear cache"
+    pdf_cache.clear()
+
+    return len(pdf_str), z
+
+  else:
+
+    return f"Chunk {chunk_id} cached. len=", len(pdf_cache[id])
+      
 @anvil.server.callable
 def handlerTest(inv_data, end, chunk):
     z=""
