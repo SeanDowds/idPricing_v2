@@ -868,19 +868,18 @@ def clearAllChunks():
 
 @anvil.server.callable
 def handlerTest(inv_data, end, chunk_id, chunk):
-  
-  # Store chunk independently in cache
-  db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
-
-  if end:
-    pdf_str=getFullString()
-    x=len(pdf_str)
-    z = "clear cache"
-
-    clearAllChunks()
-
-    return x,z
-
-  else:
-
-    return f"Chunk {chunk_id} saved as {db_id}."
+  try:
+      # Store chunk independently in cache
+      db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
+    
+      if end:
+        pdf_str=getFullString()
+        x=len(pdf_str)
+        z = "clear cache"
+    
+        clearAllChunks()
+        return x,z
+      else:
+        return f"Chunk {chunk_id} saved as {db_id}."
+  except:
+      clearAllChunks()
