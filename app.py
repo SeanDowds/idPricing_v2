@@ -821,9 +821,10 @@ def handlerTest(inv_data, end, chunk):
     y=len(pdf_cache["pdf_str"])
 
     if end:
+        z = "clear cache"
         pdf_cache.clear()
 
-    return f"str_size = {x} , cache size = {y}"
+    return f"str_size = {x} , cache size = {y}", z
 
 
 
