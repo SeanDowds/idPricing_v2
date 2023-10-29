@@ -805,6 +805,7 @@ def handler(inv_data, end, chunk):
         "end": end,
         "str_size": x,
     }
+    
 @anvil.server.callable
 def handlerTest(inv_data, end, chunk_id, chunk):
   pdf_str = ""
