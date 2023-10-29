@@ -808,6 +808,7 @@ def handler(inv_data, end, chunk):
 
 @anvil.server.callable
 def handlerTest(inv_data, end, chunk):
+    z=""
 
     # Retrieve the current state of the PDF string from the cache
     pdf_str = pdf_cache.get("pdf_str", "")
