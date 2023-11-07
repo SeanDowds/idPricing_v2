@@ -869,5 +869,6 @@ def handler(inv_data, end, chunk_id, chunk):
         return
   except:
       clearAllChunks()
+      response = 401
 
   return response
