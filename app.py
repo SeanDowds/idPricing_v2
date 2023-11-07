@@ -41,6 +41,9 @@ MAILGUN_SMTP_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
 MAILGUN_SMTP_PORT = os.environ.get('MAILGUN_SMTP_PORT')
 MAILGUN_SMTP_SERVER = os.environ.get('MAILGUN_SMTP_SERVER')
 
+MAILJET_API_KEY = os.environ.get('MAILJET_API_KEY')
+MAILJET_SECRET = os.environ.get('MAILJET_SECRET')
+
 #Heroku
 conn = pg2.connect(
     host=DB_HOST,
@@ -775,7 +778,39 @@ def send_to_Mailgun_with_Attachment(sender,inv_data, pdf_str):
 
    response = requests.post(url, auth=auth, files=files ,data=data)
    return response.status_code
+
+
+def mailjet_with_attachement(sender,inv_data, pdf_str):
+   api_key = MAILJET_API_KEY
+   api_secret = MAILJET_SECRET
+   mailjet = Client(auth=(api_key, api_secret))
+
+   attachment_data = b64decode(pdf_str)
     
+   receiver = "seandowdsmondo@gmail.com" #inv_data["receivingEmail"]
+   copy_email = inv_data["copyEmail"]
+   subject = inv_data["subject"]
+   body = inv_data["body"]
+    
+    
+   data = {  
+      'FromEmail': sender,
+      'FromName': "INSIDEedge",
+      'Subject': subject,
+      'Text-part': body,
+      'Html-part': '<h6>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!May the delivery force be with you!',
+      'Recipients': [{ "Email": receiver}],
+      'Attachments':
+         [{
+            "Content-type": "pdf",
+            "Filename": "insideEDGE Invoice",
+            "Base64Content": attachment_data
+         }]
+   }
+   result = mailjet.send.create(data=data)
+   return result.status_code, result.json()
+
+
 
 def addChunk(client, chunk, chunk_no):
     # This is the data from the DB as above
@@ -821,7 +856,10 @@ def handler(inv_data, end, chunk_id, chunk):
         sender = "inside.edge@indetail.tech"
 
         # Send to Mailgun
-        response = send_to_Mailgun_with_Attachment(sender, inv_data, pdf_str)
+        # response = send_to_Mailgun_with_Attachment(sender, inv_data, pdf_str)
+
+        # Sent to Mailjet
+        response = mailjet_with_attachement(sender, inv_data, pdf_str)
     
         clearAllChunks()
 
