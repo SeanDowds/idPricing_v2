@@ -839,7 +839,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
                 "To": [{"Email": receiver}],
                 "Subject": subject,
                 "TextPart": body,
-                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": attachment_data} ]
+                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": pdf_file} ]
             }
         ]
     }
