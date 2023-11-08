@@ -893,7 +893,7 @@ def handler(inv_data, end, chunk_id, chunk):
     clearAllChunks()
 
     # Add a 200 response to clean up
-    return response, "\n type(pdf_str)", type(pdf_str)
+    return response, "\n (pdf_str)\n", pdf_str
 
 
 '''
