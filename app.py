@@ -878,6 +878,32 @@ def clearAllChunks():
 
 @anvil.server.callable
 def handler(inv_data, end, chunk_id, chunk):
+  
+  # Store chunk independently in cache
+  db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
+
+  if end:
+    pdf_str=getFullString()
+    x=len(pdf_str)
+
+    # Use information for sending email
+    sender = "inside.edge@indetail.tech"
+
+    # Send to Mailgun
+    # response = send_to_Mailgun_with_Attachment(sender, inv_data, pdf_str)
+
+    # Sent to Mailjet
+    response = mailjet_with_attachement(sender, inv_data, pdf_str)
+
+    clearAllChunks()
+
+    # Add a 200 response to clean up
+    return response
+
+
+'''
+@anvil.server.callable
+def handler(inv_data, end, chunk_id, chunk):
   try:
       # Store chunk independently in cache
       db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
@@ -904,4 +930,5 @@ def handler(inv_data, end, chunk_id, chunk):
   except:
       clearAllChunks()
 
-  return 500
+      return 500
+'''
