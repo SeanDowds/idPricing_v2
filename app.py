@@ -839,7 +839,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
                 "To": [{"Email": receiver}],
                 "Subject": subject,
                 "TextPart": body,
-                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": pdf_file} ]
+                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": pdf_str} ]
             }
         ]
     }
@@ -903,7 +903,7 @@ def handler(inv_data, end, chunk_id, chunk):
     clearAllChunks()
 
     # Add a 200 response to clean up
-    return response
+    return response, "\n type(pdf_str)", type(pdf_str)
 
 
 '''
