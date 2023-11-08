@@ -780,7 +780,7 @@ def send_to_Mailgun_with_Attachment(sender,inv_data, pdf_str):
    return response.status_code
 
 
-def mailjet_with_attachement(sender,inv_data, pdf_str):
+def mailjet_with_attachement_SS(sender,inv_data, pdf_str):
    api_key = MAILJET_API_KEY
    api_secret = MAILJET_SECRET
    mailjet = Client(auth=(api_key, api_secret))
@@ -810,6 +810,41 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
    result = mailjet.send.create(data=data)
    return result.status_code, result.json()
 
+
+def mailjet_with_attachement(sender,inv_data, pdf_str):
+   api_key = MAILJET_API_KEY
+   api_secret = MAILJET_SECRET
+   # mailjet = Client(auth=(api_key, api_secret))
+
+   attachment_data = b64decode(pdf_str)
+   receiver = "seandowdsmondo@gmail.com" #inv_data["receivingEmail"]
+   copy_email = inv_data["copyEmail"]
+   subject = inv_data["subject"]
+   body = inv_data["body"]
+
+   # Create the Mailjet API request payload
+    payload = {
+        "Messages": [
+            {
+                "From": {"Email": sender},
+                "To": [{"Email": receiver}],
+                "Subject": subject,
+                "TextPart": body,
+                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": attachment_data} ]
+            }
+        ]
+    }
+
+    response = requests.post(
+        "https://api.mailjet.com/v3.1/send",
+        headers={"Content-Type": "application/json"},
+        auth=(MAILJET_API_KEY, MAILJET_SECRET),
+        json=payload
+    )
+
+    print(844, result.status_code)
+    return result.status_code
+    
 
 
 def addChunk(client, chunk, chunk_no):
