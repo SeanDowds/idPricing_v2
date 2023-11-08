@@ -820,7 +820,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
     pdf_b64 = base64.b64encode(pdf_str.encode('utf-8')) 
     attachment_data = pdf_b64.decode('utf-8')
 
-    receiver = "seandowdsmondo@gmail.com" #inv_data["receivingEmail"]
+    receiver = inv_data["receivingEmail"]
     copy_email = inv_data["copyEmail"]
     subject = inv_data["subject"]
     body = inv_data["body"]
