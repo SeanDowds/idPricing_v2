@@ -842,7 +842,6 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
         json=payload
     )
     
-    print(844, result.status_code)
     return result.status_code
     
 
@@ -899,10 +898,10 @@ def handler(inv_data, end, chunk_id, chunk):
         clearAllChunks()
 
         # Add a 200 response to clean up
-        return 200
+        return response
       else:
-        return
+        return 400
   except:
       clearAllChunks()
 
-  return
+  return 500
