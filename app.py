@@ -845,7 +845,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
         json=payload
     )
     
-    return result.status_code
+    return response.status_code
     
 
 
