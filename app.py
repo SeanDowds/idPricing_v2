@@ -3,7 +3,8 @@
 from flask import Flask, render_template, request, jsonify, make_response, send_file, session
 import io
 import datetime
-from base64 import b64decode
+import base64
+from base64 import b64decode, b64encode
 
 import os
 import anvil
@@ -779,7 +780,7 @@ def send_to_Mailgun_with_Attachment(sender,inv_data, pdf_str):
    response = requests.post(url, auth=auth, files=files ,data=data)
    return response.status_code
 
-
+'''
 def mailjet_with_attachement_SS(sender,inv_data, pdf_str):
    api_key = MAILJET_API_KEY
    api_secret = MAILJET_SECRET
@@ -809,14 +810,16 @@ def mailjet_with_attachement_SS(sender,inv_data, pdf_str):
    }
    result = mailjet.send.create(data=data)
    return result.status_code, result.json()
-
+'''
 
 def mailjet_with_attachement(sender,inv_data, pdf_str):
     api_key = MAILJET_API_KEY
     api_secret = MAILJET_SECRET
-    # mailjet = Client(auth=(api_key, api_secret))
-    
-    # attachment_data = b64decode(pdf_str)
+
+    # pdf_str is the decoded base64 string    
+    pdf_b64 = base64.b64encode(pdf_str.encode('utf-8')) 
+    attachment_data = pdf_b64.decode('utf-8')
+
     receiver = "seandowdsmondo@gmail.com" #inv_data["receivingEmail"]
     copy_email = inv_data["copyEmail"]
     subject = inv_data["subject"]
@@ -883,9 +886,11 @@ def handler(inv_data, end, chunk_id, chunk):
   db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
 
   if end:
-    pdf_bytes=getFullString()
-    attachment_data = b64decode(pdf_bytes)
-    pdf_str = attachment_data.decode()
+    pdf_str = getFullString()
+    
+    # pdf_bytes=getFullString()
+    # attachment_data = b64decode(pdf_bytes)
+    # pdf_str = attachment_data.decode()
 
     # Use information for sending email
     sender = "inside.edge@indetail.tech"
