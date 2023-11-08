@@ -823,7 +823,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
    body = inv_data["body"]
 
    # Create the Mailjet API request payload
-    payload = {
+   payload = {
         "Messages": [
             {
                 "From": {"Email": sender},
