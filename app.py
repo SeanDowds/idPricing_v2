@@ -816,7 +816,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
     api_secret = MAILJET_SECRET
     # mailjet = Client(auth=(api_key, api_secret))
     
-    attachment_data = b64decode(pdf_str)
+    # attachment_data = b64decode(pdf_str)
     receiver = "seandowdsmondo@gmail.com" #inv_data["receivingEmail"]
     copy_email = inv_data["copyEmail"]
     subject = inv_data["subject"]
@@ -883,14 +883,12 @@ def handler(inv_data, end, chunk_id, chunk):
   db_id = addChunk('iedge_invoice_app', chunk, chunk_id)
 
   if end:
-    pdf_str=getFullString()
-    x=len(pdf_str)
+    pdf_bytes=getFullString()
+    attachment_data = b64decode(pdf_bytes)
+    pdf_str = attachment_data.decode()
 
     # Use information for sending email
     sender = "inside.edge@indetail.tech"
-
-    # Send to Mailgun
-    # response = send_to_Mailgun_with_Attachment(sender, inv_data, pdf_str)
 
     # Sent to Mailjet
     response = mailjet_with_attachement(sender, inv_data, pdf_str)
