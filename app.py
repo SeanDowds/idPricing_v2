@@ -816,9 +816,15 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
     api_key = MAILJET_API_KEY
     api_secret = MAILJET_SECRET
 
-    # pdf_str is the decoded base64 string    
-    pdf_b64 = base64.b64encode(pdf_str.encode('utf-8')) 
-    # attachment_data = pdf_b64.decode('utf-8')
+    # Convert the string to bytes
+    pdf_bytes = b64decode(pdf_str)
+
+    # Convert the bytes to a pdf file
+    pdf_file = io.BytesIO(pdf_bytes)
+
+    # Convert to Base64
+    with open(pdf_file, "rb") as file:
+        attachment_data = base64.b64encode(file.read()).decode("utf-8")
 
     receiver = inv_data["receivingEmail"]
     copy_email = inv_data["copyEmail"]
@@ -833,7 +839,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
                 "To": [{"Email": receiver}],
                 "Subject": subject,
                 "TextPart": body,
-                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": pdf_b64} ]
+                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": attachment_data} ]
             }
         ]
     }
@@ -887,10 +893,6 @@ def handler(inv_data, end, chunk_id, chunk):
 
   if end:
     pdf_str = getFullString()
-    
-    # pdf_bytes=getFullString()
-    # attachment_data = b64decode(pdf_bytes)
-    # pdf_str = attachment_data.decode()
 
     # Use information for sending email
     sender = "inside.edge@indetail.tech"
