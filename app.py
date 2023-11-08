@@ -818,7 +818,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
 
     # pdf_str is the decoded base64 string    
     pdf_b64 = base64.b64encode(pdf_str.encode('utf-8')) 
-    attachment_data = pdf_b64.decode('utf-8')
+    # attachment_data = pdf_b64.decode('utf-8')
 
     receiver = inv_data["receivingEmail"]
     copy_email = inv_data["copyEmail"]
@@ -833,7 +833,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
                 "To": [{"Email": receiver}],
                 "Subject": subject,
                 "TextPart": body,
-                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": attachment_data} ]
+                "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": pdf_b64} ]
             }
         ]
     }
