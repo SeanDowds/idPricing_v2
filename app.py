@@ -816,16 +816,6 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
     api_key = MAILJET_API_KEY
     api_secret = MAILJET_SECRET
 
-    # Convert the string to bytes
-    pdf_bytes = b64decode(pdf_str)
-
-    # Convert the bytes to a pdf file
-    pdf_file = io.BytesIO(pdf_bytes)
-
-    # Convert to Base64
-    with open(pdf_file, "rb") as file:
-        attachment_data = base64.b64encode(file.read()).decode("utf-8")
-
     receiver = inv_data["receivingEmail"]
     copy_email = inv_data["copyEmail"]
     subject = inv_data["subject"]
