@@ -797,6 +797,7 @@ def mailjet_with_attachement(sender,inv_data, pdf_str):
             {
                 "From": {"Email": sender},
                 "To": [{"Email": receiver}],
+                "Cc": [{"Email": copy_email}],
                 "Subject": subject,
                 "TextPart": body,
                 "Attachments": [ {"ContentType": "pdf", "Filename": "your-Invoice.pdf","Base64Content": pdf_str} ]
